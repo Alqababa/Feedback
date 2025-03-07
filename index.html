@@ -1,156 +1,152 @@
 <!DOCTYPE html>
 <html lang="ar">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>صفحة التقييم</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نموذج التقييم</title>
+    
+    <!-- استيراد Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        direction: rtl;
-        background-color: #f4f4f4;
-      }
-      .container {
-        background: #fff;
-        padding: 20px;
-        margin: 50px auto;
-        width: 350px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      input,
-      textarea,
-      button {
-        width: 100%;
-        margin: 10px 0;
-        padding: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-      }
-      .stars {
-        display: flex;
-        justify-content: center;
-        direction: ltr;
-      }
-      .stars span {
-        font-size: 25px;
-        cursor: pointer;
-        color: gray;
-      }
-      .stars span.active {
-        color: gold;
-      }
-      .table-container {
-        margin-top: 20px;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-      }
-      table,
-      th,
-      td {
-        border: 1px solid #ccc;
-      }
-      th,
-      td {
-        padding: 8px;
-        text-align: center;
-      }
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: center;
+            margin: 50px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            max-width: 150px;
+            margin-bottom: 15px;
+        }
+        .stars {
+            display: flex;
+            justify-content: center;
+            direction: ltr;
+        }
+        .stars input {
+            display: none;
+        }
+        .stars label {
+            font-size: 30px;
+            color: gray;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .stars input:checked ~ label {
+            color: gold;
+        }
+        input, textarea, button {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
+
     <div class="container">
-      <h2>تقييمك يهمنا</h2>
-      <input type="tel" id="phone" placeholder="أدخل رقم الهاتف" required />
+        <img src="logo.png" alt="لوجو" class="logo">  <!-- 🔹 ضع رابط اللوجو الخاص بك هنا -->
+        <h2>نموذج التقييم</h2>
+        
+        <form id="feedbackForm">
+            <label for="phone">رقم الهاتف:</label>
+            <input type="tel" id="phone" required>
 
-      <div class="stars">
-        <span data-value="1">★</span>
-        <span data-value="2">★</span>
-        <span data-value="3">★</span>
-        <span data-value="4">★</span>
-        <span data-value="5">★</span>
-      </div>
+            <label>التقييم:</label>
+            <div class="stars">
+                <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+                <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+                <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+                <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+                <input type="radio" id="star1" name="rating" value="1" checked><label for="star1">★</label>
+            </div>
 
-      <textarea id="suggestion" placeholder="أدخل اقتراحك"></textarea>
+            <label for="comments">ملاحظات:</label>
+            <textarea id="comments"></textarea>
 
-      <button onclick="submitReview()">إرسال التقييم</button>
-
-      <div class="table-container">
-        <h3>سجل التقييمات</h3>
-        <table>
-          <thead>
-    <tr>
-        <th>رقم الهاتف</th>
-        <th>التقييم</th>
-        <th>الاقتراح</th>
-        <th>النقاط</th>
-        <th>التاريخ</th> <!-- تأكد من إضافة هذا العمود -->
-    </tr>
-</thead>
-<tbody id="reviewTableBody"></tbody>
-        </table>
-      </div>
+            <button type="submit">إرسال التقييم</button>
+        </form>
     </div>
 
     <script>
-      let selectedRating = 0;
-
-      document.querySelectorAll(".stars span").forEach((star) => {
-        star.addEventListener("click", function () {
-          selectedRating = this.getAttribute("data-value");
-          document
-            .querySelectorAll(".stars span")
-            .forEach((s) => s.classList.remove("active"));
-          for (let i = 0; i < selectedRating; i++) {
-            document.querySelectorAll(".stars span")[i].classList.add("active");
-          }
-        });
-      });
-
-      function submitReview() {
-        let phone = document.getElementById("phone").value;
-        let suggestion = document.getElementById("suggestion").value;
-
-        if (!phone || selectedRating == 0) {
-          alert("يرجى إدخال رقم الهاتف واختيار التقييم.");
-          return;
-        }
-
-        let points = 5; // النقاط التي يحصل عليها المستخدم
-
-        let formData = {
-          phone: phone,
-          rating: selectedRating,
-          suggestion: suggestion,
-          points: points,
+        // 🔹 إعداد Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB93ZciUCCEF7-lUIMoI0narSUabnpnrkE",
+            authDomain: "test-65ba0.firebaseapp.com",
+            projectId: "test-65ba0",
+            storageBucket: "test-65ba0.firebasestorage.app",
+            messagingSenderId: "556279260023",
+            appId: "1:556279260023:web:4924762ba1d91a5fa2f772"
         };
 
-        fetch(
-          "https://script.google.com/macros/s/AKfycbwHNynbMQsPFbINlcLpyihGjHoD56fkvhISnq-3YxheuA7Nn2rJw_Isl9_QyQpCnihltA/exec",
-          {
-            // استبدل بـ URL الذي حصلت عليه من Google Apps Script
-            method: "POST",
-            mode: "no-cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        )
-          .then(() => {
-            alert("تم إرسال التقييم بنجاح!");
-            document.getElementById("phone").value = "";
-            document.getElementById("suggestion").value = "";
-            selectedRating = 0;
-            document
-              .querySelectorAll(".stars span")
-              .forEach((s) => s.classList.remove("active"));
-          })
-          .catch((error) => console.log("Error:", error));
-      }
+        // 🔹 تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        document.getElementById('feedbackForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const phone = document.getElementById('phone').value.trim();
+            const rating = document.querySelector('input[name="rating"]:checked').value;
+            const comments = document.getElementById('comments').value.trim();
+
+            if (!phone || !rating) {
+                alert('يرجى ملء جميع الحقول المطلوبة.');
+                return;
+            }
+
+            try {
+                const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+                const userRef = db.collection('feedback').doc(phone);
+                const doc = await userRef.get();
+
+                if (doc.exists && doc.data().date === today) {
+                    alert("لقد قمت بالتقييم اليوم بالفعل!");
+                    return;
+                }
+
+                // 🟢 تحديث النقاط السابقة وإضافة 5 نقاط جديدة
+                let totalPoints = doc.exists ? doc.data().points + 5 : 5;
+
+                await userRef.set({
+                    phone: phone,
+                    rating: parseInt(rating),
+                    comments: comments,
+                    date: today,
+                    points: totalPoints
+                });
+
+                // ✅ توجيه المستخدم إلى صفحة الشكر مع تمرير رقم الهاتف
+                window.location.href = `thankyou.html?phone=${phone}`;
+            } catch (error) {
+                console.error("خطأ أثناء الإرسال:", error);
+                alert("حدث خطأ أثناء الإرسال.");
+            }
+        });
     </script>
-  </body>
+
+</body>
 </html>
