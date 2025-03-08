@@ -30,22 +30,21 @@
             max-width: 150px;
             margin-bottom: 15px;
         }
-        .stars {
+        .emoji-rating {
             display: flex;
             justify-content: center;
-            direction: ltr;
+            gap: 10px;
         }
-        .stars input {
+        .emoji-rating input {
             display: none;
         }
-        .stars label {
+        .emoji-rating label {
             font-size: 30px;
-            color: gray;
             cursor: pointer;
-            transition: color 0.3s;
+            transition: transform 0.2s;
         }
-        .stars input:checked ~ label {
-            color: gold;
+        .emoji-rating label:hover, .emoji-rating input:checked + label {
+            transform: scale(1.2);
         }
         input, textarea, button {
             width: 100%;
@@ -68,7 +67,7 @@
 <body>
 
     <div class="container">
-        <img src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png" alt="لوجو" class="logo">  <!-- 🔹 ضع رابط اللوجو الخاص بك هنا -->
+        <img src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png" alt="لوجو" class="logo">
         <h2>نموذج التقييم</h2>
         
         <form id="feedbackForm">
@@ -76,12 +75,12 @@
             <input type="tel" id="phone" required>
 
             <label>التقييم:</label>
-            <div class="stars">
-                <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
-                <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
-                <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
-                <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
-                <input type="radio" id="star1" name="rating" value="1" checked><label for="star1">★</label>
+            <div class="emoji-rating">
+                <input type="radio" id="emoji1" name="rating" value="1"><label for="emoji1">😡</label>
+                <input type="radio" id="emoji2" name="rating" value="2"><label for="emoji2">😞</label>
+                <input type="radio" id="emoji3" name="rating" value="3"><label for="emoji3">😐</label>
+                <input type="radio" id="emoji4" name="rating" value="4"><label for="emoji4">😊</label>
+                <input type="radio" id="emoji5" name="rating" value="5"><label for="emoji5">😍</label>
             </div>
 
             <label for="comments">ملاحظات:</label>
@@ -92,17 +91,15 @@
     </div>
 
     <script>
-        // 🔹 إعداد Firebase
         const firebaseConfig = {
-  apiKey: "AIzaSyB2kh06x0kA-SNA-dU2fu0-66xHsbATBRY",
-  authDomain: "feedback-445b9.firebaseapp.com",
-  projectId: "feedback-445b9",
-  storageBucket: "feedback-445b9.firebasestorage.app",
-  messagingSenderId: "771007711501",
-  appId: "1:771007711501:web:412efa0484ba4d3203c844"
-};
+            apiKey: "AIzaSyB2kh06x0kA-SNA-dU2fu0-66xHsbATBRY",
+            authDomain: "feedback-445b9.firebaseapp.com",
+            projectId: "feedback-445b9",
+            storageBucket: "feedback-445b9.firebasestorage.app",
+            messagingSenderId: "771007711501",
+            appId: "1:771007711501:web:412efa0484ba4d3203c844"
+        };
 
-        // 🔹 تهيئة Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
@@ -110,7 +107,7 @@
             event.preventDefault();
 
             const phone = document.getElementById('phone').value.trim();
-            const rating = document.querySelector('input[name="rating"]:checked').value;
+            const rating = document.querySelector('input[name="rating"]:checked')?.value;
             const comments = document.getElementById('comments').value.trim();
 
             if (!phone || !rating) {
@@ -119,7 +116,7 @@
             }
 
             try {
-                const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+                const today = new Date().toISOString().split('T')[0];
                 const userRef = db.collection('feedback').doc(phone);
                 const doc = await userRef.get();
 
@@ -128,7 +125,6 @@
                     return;
                 }
 
-                // 🟢 تحديث النقاط السابقة وإضافة 5 نقاط جديدة
                 let totalPoints = doc.exists ? doc.data().points + 5 : 5;
 
                 await userRef.set({
@@ -139,7 +135,6 @@
                     points: totalPoints
                 });
 
-                // ✅ توجيه المستخدم إلى صفحة الشكر مع تمرير رقم الهاتف
                 window.location.href = `thankyou.html?phone=${phone}`;
             } catch (error) {
                 console.error("خطأ أثناء الإرسال:", error);
@@ -147,6 +142,5 @@
             }
         });
     </script>
-
 </body>
 </html>
