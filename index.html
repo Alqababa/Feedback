@@ -69,14 +69,14 @@
 <body>
 
     <div class="container">
-        <img src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png" alt="لوجو" class="logo">
+        <img src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png?raw=true" alt="لوجو" class="logo">
         <h2>نموذج التقييم</h2>
         
         <form id="feedbackForm">
             <label for="phone">رقم الهاتف:</label>
             <input type="tel" id="phone" required>
 
-            <label>التقييم:</label>
+            <label>ما مدى سعادتك بطعامنا؟</label>
             <div class="emoji-rating">
                 <input type="radio" id="emoji1" name="rating" value="1"><label for="emoji1">😡</label>
                 <input type="radio" id="emoji2" name="rating" value="2"><label for="emoji2">😞</label>
@@ -104,6 +104,12 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+
+        function clearForm() {
+            document.getElementById('phone').value = "";
+            document.getElementById('comments').value = "";
+            document.querySelectorAll('input[name="rating"]').forEach(input => input.checked = false);
+        }
 
         document.getElementById('feedbackForm').addEventListener('submit', async function (event) {
             event.preventDefault();
@@ -137,10 +143,17 @@
                     points: totalPoints
                 });
 
+                clearForm();
                 window.location.href = `thankyou.html?phone=${phone}`;
             } catch (error) {
                 console.error("خطأ أثناء الإرسال:", error);
                 alert("حدث خطأ أثناء الإرسال.");
+            }
+        });
+
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) {
+                clearForm();
             }
         });
     </script>
