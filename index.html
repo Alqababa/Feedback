@@ -8,10 +8,12 @@
     <!-- استيراد Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Tajawal", sans-serif;
             direction: rtl;
             text-align: center;
             margin: 50px;
@@ -50,8 +52,8 @@
         }
         input, textarea, button {
             width: 100%;
-            margin-bottom: 10px;
-            padding: 10px;
+            margin: 15px 0;
+            padding: 10px 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
@@ -69,14 +71,14 @@
 <body>
 
     <div class="container">
-        <img src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png" alt="لوجو" class="logo">
+        <img src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png?raw=true" alt="لوجو" class="logo">
         <h2>نموذج التقييم</h2>
         
         <form id="feedbackForm">
             <label for="phone">رقم الهاتف:</label>
             <input type="tel" id="phone" required pattern="05[0-9]{8}" title="يجب أن يبدأ الرقم بـ 05 ويتكون من 10 أرقام">
 
-            <label>التقييم:</label>
+            <label>ما مدى سعادتك بطعامنا؟</label>
             <div class="emoji-rating">
                 <input type="radio" id="emoji1" name="rating" value="1"><label for="emoji1">😡</label>
                 <input type="radio" id="emoji2" name="rating" value="2"><label for="emoji2">😞</label>
@@ -85,7 +87,7 @@
                 <input type="radio" id="emoji5" name="rating" value="5"><label for="emoji5">😍</label>
             </div>
 
-            <label for="comments">ملاحظات:</label>
+            <label for="comments">هل لديك اي ملاحظات أو اقتراحات لتحسين خدماتنا؟</label>
             <textarea id="comments"></textarea>
 
             <button type="submit">إرسال التقييم</button>
