@@ -8,9 +8,11 @@
     <!-- استيراد Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
+
     <style>
         body {
             font-family: "Tajawal", sans-serif;
@@ -31,13 +33,27 @@
             font-weight: bold;
             color: #007bff;
         }
+        .reward-message {
+            display: none;
+            background-color: #ffeb3b;
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-<img src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png?raw=true" alt="لوجو" class="logo">
+
+    <img src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png?raw=true" alt="لوجو" class="logo">
     <h2>🎉 شكرًا لك على تقييمك! 🎉</h2>
     <p>عدد النقاط التي جمعتها حتى الآن:</p>
     <p id="points">... جاري التحميل ...</p>
+
+    <!-- رسالة تهنئة عند الوصول إلى 10 نقاط -->
+    <div id="rewardMessage" class="reward-message"></div>
 
     <!-- مكتبة تأثير الشرائط المتناثرة -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.0.2"></script>
@@ -45,13 +61,13 @@
     <script>
         // 🔹 إعداد Firebase
         const firebaseConfig = {
-  apiKey: "AIzaSyB2kh06x0kA-SNA-dU2fu0-66xHsbATBRY",
-  authDomain: "feedback-445b9.firebaseapp.com",
-  projectId: "feedback-445b9",
-  storageBucket: "feedback-445b9.firebasestorage.app",
-  messagingSenderId: "771007711501",
-  appId: "1:771007711501:web:412efa0484ba4d3203c844"
-};
+            apiKey: "AIzaSyB2kh06x0kA-SNA-dU2fu0-66xHsbATBRY",
+            authDomain: "feedback-445b9.firebaseapp.com",
+            projectId: "feedback-445b9",
+            storageBucket: "feedback-445b9.firebasestorage.app",
+            messagingSenderId: "771007711501",
+            appId: "1:771007711501:web:412efa0484ba4d3203c844"
+        };
 
         // 🔹 تهيئة Firebase
         firebase.initializeApp(firebaseConfig);
@@ -67,6 +83,15 @@
                 if (doc.exists) {
                     const points = doc.data().points; // ✅ التأكد من جلب النقاط
                     document.getElementById("points").textContent = points ? points : "0";
+
+                    // 🎉 إذا كان عدد النقاط 10 أو أكثر، عرض رسالة الاستبدال
+                    if (points >= 10) {
+                        document.getElementById("rewardMessage").innerHTML = 
+                            `🎊 مبروك! يمكنك الآن استبدال نقاطك بوجبة مجانية بقيمة 40 درهم!<br>📞 رقم هاتفك: <strong>${phone}</strong>`;
+                        document.getElementById("rewardMessage").style.display = "block";
+                        launchConfetti();
+                    }
+
                 } else {
                     document.getElementById("points").textContent = "0";
                 }
@@ -75,13 +100,12 @@
                 document.getElementById("points").textContent = "خطأ في جلب البيانات";
             });
 
-            // 🎉 تأثير الشرائط المتناثرة (يتكرر مرتين)
+            // 🎉 تأثير الشرائط المتناثرة عند الوصول إلى النقاط المطلوبة
             function launchConfetti() {
                 confetti({ particleCount: 100, spread: 70 });
                 setTimeout(() => confetti({ particleCount: 100, spread: 70 }), 1000);
                 setTimeout(() => confetti({ particleCount: 100, spread: 70 }), 2000);
             }
-            launchConfetti();
         } else {
             document.getElementById("points").textContent = "لا يوجد رقم هاتف";
         }
