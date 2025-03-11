@@ -81,15 +81,17 @@
             const userRef = db.collection('feedback').doc(phone);
             userRef.get().then(doc => {
                 if (doc.exists) {
-                    const points = doc.data().points; // ✅ التأكد من جلب النقاط
-                    document.getElementById("points").textContent = points ? points : "0";
+                    const points = doc.data().points || 0; // ✅ التأكد من جلب النقاط
+                    document.getElementById("points").textContent = points;
 
-                    // 🎉 إذا كان عدد النقاط 10 أو أكثر، عرض رسالة الاستبدال
+                    // 🎉 تشغيل تأثير الشرائط المتناثرة عند كل تحديث للنقاط
+                    launchConfetti();
+
+                    // 🎊 إذا كان عدد النقاط 10 أو أكثر، عرض رسالة الاستبدال
                     if (points >= 10) {
                         document.getElementById("rewardMessage").innerHTML = 
                             `🎊 مبروك! يمكنك الآن استبدال نقاطك بوجبة مجانية بقيمة 40 درهم!<br>📞 رقم هاتفك: <strong>${phone}</strong>`;
                         document.getElementById("rewardMessage").style.display = "block";
-                        launchConfetti();
                     }
 
                 } else {
@@ -100,7 +102,7 @@
                 document.getElementById("points").textContent = "خطأ في جلب البيانات";
             });
 
-            // 🎉 تأثير الشرائط المتناثرة عند الوصول إلى النقاط المطلوبة
+            // 🎉 تأثير الشرائط المتناثرة
             function launchConfetti() {
                 confetti({ particleCount: 100, spread: 70 });
                 setTimeout(() => confetti({ particleCount: 100, spread: 70 }), 1000);
