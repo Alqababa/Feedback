@@ -33,8 +33,7 @@
             font-weight: bold;
             color: #007bff;
         }
-        .reward-message {
-            display: none;
+        .reward-message, .remaining-points-message {
             background-color: #ffeb3b;
             color: #333;
             padding: 15px;
@@ -42,6 +41,7 @@
             margin-top: 20px;
             font-size: 18px;
             font-weight: bold;
+            display: none;
         }
     </style>
 </head>
@@ -52,8 +52,11 @@
     <p>عدد النقاط التي جمعتها حتى الآن:</p>
     <p id="points">... جاري التحميل ...</p>
 
-    <!-- رسالة تهنئة عند الوصول إلى 10 نقاط -->
+    <!-- رسالة تهنئة عند الوصول إلى 100 نقطة -->
     <div id="rewardMessage" class="reward-message"></div>
+
+    <!-- رسالة توضح عدد النقاط المتبقية -->
+    <div id="remainingPointsMessage" class="remaining-points-message"></div>
 
     <!-- مكتبة تأثير الشرائط المتناثرة -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.0.2"></script>
@@ -87,11 +90,17 @@
                     // 🎉 تشغيل تأثير الشرائط المتناثرة عند كل تحديث للنقاط
                     launchConfetti();
 
-                    // 🎊 إذا كان عدد النقاط 10 أو أكثر، عرض رسالة الاستبدال
+                    // ✅ إذا كان عدد النقاط 100 أو أكثر، عرض رسالة الاستبدال
                     if (points >= 100) {
                         document.getElementById("rewardMessage").innerHTML = 
                             `🎊 مبروك! يمكنك الآن استبدال نقاطك بوجبة مجانية بقيمة 40 درهم!<br>📞 رقم هاتفك: <strong>${phone}</strong>`;
                         document.getElementById("rewardMessage").style.display = "block";
+                    } else {
+                        // ✅ حساب عدد النقاط المتبقية حتى 100 وإظهارها
+                        let remainingPoints = 100 - points;
+                        document.getElementById("remainingPointsMessage").innerHTML = 
+                            `⭐ لديك <strong>${points}</strong> نقطة، وتبقى لك <strong>${remainingPoints}</strong> نقطة فقط للحصول على وجبة مجانية! 🍔`;
+                        document.getElementById("remainingPointsMessage").style.display = "block";
                     }
 
                 } else {
