@@ -91,13 +91,13 @@
                     launchConfetti();
 
                     // ✅ إذا كان عدد النقاط 100 أو أكثر، عرض رسالة الاستبدال
-                    if (points >= 100) {
+                    if (points >= 50) {
                         document.getElementById("rewardMessage").innerHTML = 
                             `🎊 مبروك! يمكنك الآن استبدال نقاطك بوجبة مجانية بقيمة 40 درهم!<br>📞 رقم هاتفك: <strong>${phone}</strong>`;
                         document.getElementById("rewardMessage").style.display = "block";
                     } else {
                         // ✅ حساب عدد النقاط المتبقية حتى 100 وإظهارها
-                        let remainingPoints = 100 - points;
+                        let remainingPoints = 50 - points;
                         document.getElementById("remainingPointsMessage").innerHTML = 
                             `⭐ لديك <strong>${points}</strong> نقطة، وتبقى لك <strong>${remainingPoints}</strong> نقطة فقط للحصول على وجبة مجانية! `;
                         document.getElementById("remainingPointsMessage").style.display = "block";
