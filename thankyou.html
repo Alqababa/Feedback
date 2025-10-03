@@ -25,6 +25,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
 
         .container {
@@ -37,6 +38,7 @@
             box-shadow: 0 10px 25px rgba(0, 119, 190, 0.15);
             position: relative;
             overflow: hidden;
+            z-index: 10;
         }
 
         .container::before {
@@ -184,9 +186,23 @@
             color: #ffcc00;
             font-size: 24px;
         }
+
+        /* تأثير الكونفيتي */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
+    <!-- عنصر الكانفاس للكونفيتي -->
+    <canvas id="confetti-canvas"></canvas>
+    
     <div class="container">
         <div class="logo-container">
             <img src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png?raw=true" alt="لوجو" class="logo">
@@ -224,9 +240,6 @@
         <div class="waves"></div>
     </div>
 
-    <!-- مكتبة تأثير الشرائط المتناثرة -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.0.2"></script>
-
     <script>
         // 🔹 إعداد Firebase
         const firebaseConfig = {
@@ -251,6 +264,64 @@
             window.open('https://maps.app.goo.gl/MNkEuaqDoSXXQ4rY8', '_blank');
         });
 
+        // 🎉 تأثير الكونفيتي المخصص
+        function launchConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const confettiPieces = [];
+            const colors = ['#0077be', '#00a8e8', '#4dc6ff', '#ffcc00', '#28a745', '#dc3545'];
+            
+            // إنشاء قطع الكونفيتي
+            for (let i = 0; i < 150; i++) {
+                confettiPieces.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 10 + 5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speed: Math.random() * 3 + 2,
+                    angle: Math.random() * 360,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: Math.random() * 10 - 5
+                });
+            }
+
+            function drawConfetti() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                let activePieces = 0;
+                
+                confettiPieces.forEach(piece => {
+                    piece.y += piece.speed;
+                    piece.x += Math.sin(piece.angle * Math.PI / 180) * 1;
+                    piece.angle += 2;
+                    piece.rotation += piece.rotationSpeed;
+                    
+                    if (piece.y < canvas.height) {
+                        activePieces++;
+                        
+                        ctx.save();
+                        ctx.translate(piece.x, piece.y);
+                        ctx.rotate(piece.rotation * Math.PI / 180);
+                        ctx.fillStyle = piece.color;
+                        ctx.fillRect(-piece.size / 2, -piece.size / 2, piece.size, piece.size);
+                        ctx.restore();
+                    }
+                });
+                
+                if (activePieces > 0) {
+                    requestAnimationFrame(drawConfetti);
+                } else {
+                    // إعادة التشغيل بعد انتهاء التأثير
+                    setTimeout(launchConfetti, 1000);
+                }
+            }
+            
+            drawConfetti();
+        }
+
         if (phone) {
             // عرض رقم الهاتف للمستخدم
             document.getElementById('userPhone').textContent = phone;
@@ -261,7 +332,7 @@
                     const points = doc.data().points || 0; // ✅ التأكد من جلب النقاط
                     document.getElementById("points").textContent = points;
 
-                    // 🎉 تشغيل تأثير الشرائط المتناثرة عند كل تحديث للنقاط
+                    // 🎉 تشغيل تأثير الكونفيتي عند كل تحديث للنقاط
                     launchConfetti();
 
                     // ✅ إذا كان عدد النقاط 50 أو أكثر، عرض رسالة الاستبدال
@@ -269,6 +340,11 @@
                         document.getElementById("rewardMessage").innerHTML = 
                             `🎊 مبروك! يمكنك الآن استبدال نقاطك بوجبة مجانية بقيمة 40 درهم!<br>📞 رقم هاتفك: <strong class="phone-highlight">${phone}</strong>`;
                         document.getElementById("rewardMessage").style.display = "block";
+                        
+                        // تأثير كونفيتي إضافي عند الوصول إلى 50 نقطة
+                        setTimeout(() => {
+                            launchConfetti();
+                        }, 1500);
                     } else {
                         // ✅ حساب عدد النقاط المتبقية حتى 50 وإظهارها
                         let remainingPoints = 50 - points;
@@ -279,38 +355,24 @@
 
                 } else {
                     document.getElementById("points").textContent = "0";
+                    launchConfetti(); // تشغيل الكونفيتي حتى لو لم توجد بيانات
                 }
             }).catch(error => {
                 console.error("❌ خطأ أثناء جلب النقاط:", error);
                 document.getElementById("points").textContent = "خطأ في جلب البيانات";
+                launchConfetti(); // تشغيل الكونفيتي حتى في حالة الخطأ
             });
-
-            // 🎉 تأثير الشرائط المتناثرة
-            function launchConfetti() {
-                confetti({ 
-                    particleCount: 150, 
-                    spread: 100,
-                    origin: { y: 0.6 },
-                    colors: ['#0077be', '#00a8e8', '#4dc6ff', '#ffcc00']
-                });
-                
-                setTimeout(() => confetti({ 
-                    particleCount: 100, 
-                    spread: 70,
-                    origin: { x: 0.3, y: 0.6 },
-                    colors: ['#0077be', '#00a8e8', '#4dc6ff']
-                }), 500);
-                
-                setTimeout(() => confetti({ 
-                    particleCount: 100, 
-                    spread: 70,
-                    origin: { x: 0.7, y: 0.6 },
-                    colors: ['#0077be', '#00a8e8', '#ffcc00']
-                }), 1000);
-            }
         } else {
             document.getElementById("points").textContent = "لا يوجد رقم هاتف";
+            launchConfetti(); // تشغيل الكونفيتي حتى لو لم يكن هناك رقم هاتف
         }
+
+        // إعادة ضبط حجم الكانفاس عند تغيير حجم النافذة
+        window.addEventListener('resize', function() {
+            const canvas = document.getElementById('confetti-canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
     </script>
 
 </body>
