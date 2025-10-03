@@ -14,12 +14,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
 
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: "Tajawal", sans-serif;
             direction: rtl;
             text-align: center;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             background: linear-gradient(135deg, #e6f7ff 0%, #b3e0ff 100%);
             min-height: 100vh;
             display: flex;
@@ -29,15 +35,14 @@
         }
 
         .container {
-            max-width: 500px;
-            width: 100%;
-            padding: 30px;
+            max-width: 95%;
+            width: 400px;
+            padding: 20px;
             border: 1px solid #b3e0ff;
             border-radius: 15px;
             background-color: white;
             box-shadow: 0 10px 25px rgba(0, 119, 190, 0.15);
             position: relative;
-            overflow: hidden;
             z-index: 10;
         }
 
@@ -54,11 +59,11 @@
         .logo-container {
             display: flex;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .logo {
-            max-width: 180px;
+            max-width: 140px;
             transition: transform 0.3s;
         }
 
@@ -68,7 +73,8 @@
 
         h2 {
             color: #0077be;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
             position: relative;
             display: inline-block;
         }
@@ -76,10 +82,10 @@
         h2::after {
             content: '';
             position: absolute;
-            bottom: -10px;
+            bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-            width: 50px;
+            width: 40px;
             height: 3px;
             background: linear-gradient(90deg, #0077be 0%, #4dc6ff 100%);
             border-radius: 3px;
@@ -88,32 +94,32 @@
         .points-container {
             background: linear-gradient(135deg, #e6f7ff 0%, #cce7ff 100%);
             border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
+            padding: 15px;
+            margin: 15px 0;
             border: 2px dashed #0077be;
         }
 
         #points {
-            font-size: 48px;
+            font-size: 2.5rem;
             font-weight: bold;
             color: #0077be;
-            margin: 10px 0;
+            margin: 8px 0;
             text-shadow: 1px 1px 3px rgba(0, 119, 190, 0.2);
         }
 
         .points-label {
-            font-size: 18px;
+            font-size: 1rem;
             color: #0066a4;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .reward-message, .remaining-points-message {
             background: linear-gradient(135deg, #ffeb3b 0%, #ffcc00 100%);
             color: #8a6d00;
-            padding: 15px;
+            padding: 12px;
             border-radius: 10px;
-            margin: 20px 0;
-            font-size: 18px;
+            margin: 15px 0;
+            font-size: 0.9rem;
             font-weight: bold;
             border: 1px solid #ffcc00;
             box-shadow: 0 3px 10px rgba(255, 204, 0, 0.3);
@@ -123,32 +129,34 @@
         .phone-highlight {
             background-color: #0077be;
             color: white;
-            padding: 5px 10px;
+            padding: 4px 8px;
             border-radius: 5px;
             font-weight: bold;
+            font-size: 0.9rem;
         }
 
         .google-review-btn {
             background: linear-gradient(135deg, #0077be 0%, #00a8e8 100%);
             color: white;
             border: none;
-            padding: 15px 25px;
+            padding: 12px 20px;
             border-radius: 10px;
-            font-size: 18px;
+            font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            margin: 20px 0;
+            margin: 15px 0;
             transition: all 0.3s;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             box-shadow: 0 4px 15px rgba(0, 119, 190, 0.3);
+            width: 100%;
         }
 
         .google-review-btn:hover {
             background: linear-gradient(135deg, #00a8e8 0%, #0077be 100%);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 119, 190, 0.4);
         }
 
@@ -159,32 +167,20 @@
         .review-text {
             background-color: #f0f8ff;
             border-radius: 10px;
-            padding: 15px;
-            margin: 20px 0;
+            padding: 12px;
+            margin: 15px 0;
             border-left: 4px solid #0077be;
         }
 
         .encouragement-text {
-            font-size: 16px;
+            font-size: 0.9rem;
             color: #0066a4;
-            margin: 15px 0;
-            line-height: 1.6;
-        }
-
-        .waves {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 40px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="%230077be"/><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="%230077be"/><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="%230077be"/></svg>');
-            background-size: 1200px 40px;
-            opacity: 0.1;
+            line-height: 1.5;
         }
 
         .star-icon {
             color: #ffcc00;
-            font-size: 24px;
+            font-size: 1.2rem;
         }
 
         /* تأثير الكونفيتي */
@@ -196,6 +192,16 @@
             height: 100%;
             pointer-events: none;
             z-index: 1;
+        }
+
+        .stats-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 0.8rem;
+            color: #666;
+            border: 1px solid #e9ecef;
         }
     </style>
 </head>
@@ -225,19 +231,20 @@
         <div class="review-text">
             <div class="encouragement-text">
                 <span class="star-icon">★</span> رقم هاتفك <span id="userPhone" class="phone-highlight">...</span> مميز جداً!<br>
-                أنت تجمع النقاط بسرعة رائعة!<br>
-                استمر في التقييم لتحصل على مكافآت أكثر!
+                أنت تجمع النقاط بسرعة رائعة!
             </div>
         </div>
 
         <!-- زر التقييم على جوجل -->
         <button class="google-review-btn" id="googleReviewBtn">
             <span>⭐</span>
-            اجمع المزيد من النقاط عن طريق تقييمنا على جوجل
+            اضغط هنا لتقييمنا على جوجل
             <span>⭐</span>
         </button>
 
-        <div class="waves"></div>
+        <div class="stats-info" id="statsInfo">
+            📊 سيتم تسجيل نقاط إضافية عند تقييمك على جوجل
+        </div>
     </div>
 
     <script>
@@ -259,11 +266,6 @@
         const urlParams = new URLSearchParams(window.location.search);
         const phone = urlParams.get("phone");
 
-        // زر التقييم على جوجل
-        document.getElementById('googleReviewBtn').addEventListener('click', function() {
-            window.open('https://maps.app.goo.gl/MNkEuaqDoSXXQ4rY8', '_blank');
-        });
-
         // 🎉 تأثير الكونفيتي المخصص
         function launchConfetti() {
             const canvas = document.getElementById('confetti-canvas');
@@ -275,16 +277,16 @@
             const colors = ['#0077be', '#00a8e8', '#4dc6ff', '#ffcc00', '#28a745', '#dc3545'];
             
             // إنشاء قطع الكونفيتي
-            for (let i = 0; i < 150; i++) {
+            for (let i = 0; i < 120; i++) {
                 confettiPieces.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height - canvas.height,
-                    size: Math.random() * 10 + 5,
+                    size: Math.random() * 8 + 4,
                     color: colors[Math.floor(Math.random() * colors.length)],
                     speed: Math.random() * 3 + 2,
                     angle: Math.random() * 360,
                     rotation: Math.random() * 360,
-                    rotationSpeed: Math.random() * 10 - 5
+                    rotationSpeed: Math.random() * 8 - 4
                 });
             }
 
@@ -313,14 +315,51 @@
                 
                 if (activePieces > 0) {
                     requestAnimationFrame(drawConfetti);
-                } else {
-                    // إعادة التشغيل بعد انتهاء التأثير
-                    setTimeout(launchConfetti, 1000);
                 }
             }
             
             drawConfetti();
         }
+
+        // 📊 دالة لتسجيل النقرات على رابط جوجل
+        function trackGoogleReviewClick(phone) {
+            const clickData = {
+                phone: phone,
+                timestamp: new Date().toISOString(),
+                type: 'google_review_click',
+                userAgent: navigator.userAgent
+            };
+
+            // حفظ البيانات في Firebase
+            db.collection('google_review_clicks').add(clickData)
+                .then(() => {
+                    console.log('✅ تم تسجيل النقرة على رابط جوجل');
+                })
+                .catch((error) => {
+                    console.error('❌ خطأ في تسجيل النقرة:', error);
+                });
+        }
+
+        // زر التقييم على جوجل
+        document.getElementById('googleReviewBtn').addEventListener('click', function() {
+            if (phone) {
+                // تسجيل النقرة قبل الانتقال
+                trackGoogleReviewClick(phone);
+            }
+            
+            // فتح رابط جوجل في نافذة جديدة
+            window.open('https://maps.app.goo.gl/MNkEuaqDoSXXQ4rY8', '_blank');
+            
+            // تحديث نص الزر
+            this.innerHTML = '<span>✅</span> شكرًا لك! تم فتح صفحة التقييم <span>✅</span>';
+            this.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+            
+            // إظهار رسالة تأكيد
+            document.getElementById('statsInfo').innerHTML = '✅ تم تسجيل طلبك! ستحصل على نقاط إضافية عند الانتهاء من التقييم';
+            document.getElementById('statsInfo').style.background = '#d4edda';
+            document.getElementById('statsInfo').style.color = '#155724';
+            document.getElementById('statsInfo').style.borderColor = '#c3e6cb';
+        });
 
         if (phone) {
             // عرض رقم الهاتف للمستخدم
@@ -329,42 +368,37 @@
             const userRef = db.collection('feedback').doc(phone);
             userRef.get().then(doc => {
                 if (doc.exists) {
-                    const points = doc.data().points || 0; // ✅ التأكد من جلب النقاط
+                    const points = doc.data().points || 0;
                     document.getElementById("points").textContent = points;
 
-                    // 🎉 تشغيل تأثير الكونفيتي عند كل تحديث للنقاط
+                    // 🎉 تشغيل تأثير الكونفيتي
                     launchConfetti();
 
                     // ✅ إذا كان عدد النقاط 50 أو أكثر، عرض رسالة الاستبدال
                     if (points >= 50) {
                         document.getElementById("rewardMessage").innerHTML = 
-                            `🎊 مبروك! يمكنك الآن استبدال نقاطك بوجبة مجانية بقيمة 40 درهم!<br>📞 رقم هاتفك: <strong class="phone-highlight">${phone}</strong>`;
+                            `🎊 مبروك! يمكنك استبدال نقاطك بوجبة مجانية!<br>📞 رقمك: <strong class="phone-highlight">${phone}</strong>`;
                         document.getElementById("rewardMessage").style.display = "block";
-                        
-                        // تأثير كونفيتي إضافي عند الوصول إلى 50 نقطة
-                        setTimeout(() => {
-                            launchConfetti();
-                        }, 1500);
                     } else {
                         // ✅ حساب عدد النقاط المتبقية حتى 50 وإظهارها
                         let remainingPoints = 50 - points;
                         document.getElementById("remainingPointsMessage").innerHTML = 
-                            `⭐ لديك <strong>${points}</strong> نقطة، وتبقى لك <strong>${remainingPoints}</strong> نقطة فقط للحصول على وجبة مجانية! `;
+                            `⭐ لديك <strong>${points}</strong> نقطة، تبقى <strong>${remainingPoints}</strong> نقطة للوجبة المجانية!`;
                         document.getElementById("remainingPointsMessage").style.display = "block";
                     }
 
                 } else {
                     document.getElementById("points").textContent = "0";
-                    launchConfetti(); // تشغيل الكونفيتي حتى لو لم توجد بيانات
+                    launchConfetti();
                 }
             }).catch(error => {
                 console.error("❌ خطأ أثناء جلب النقاط:", error);
                 document.getElementById("points").textContent = "خطأ في جلب البيانات";
-                launchConfetti(); // تشغيل الكونفيتي حتى في حالة الخطأ
+                launchConfetti();
             });
         } else {
             document.getElementById("points").textContent = "لا يوجد رقم هاتف";
-            launchConfetti(); // تشغيل الكونفيتي حتى لو لم يكن هناك رقم هاتف
+            launchConfetti();
         }
 
         // إعادة ضبط حجم الكانفاس عند تغيير حجم النافذة
@@ -373,6 +407,13 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         });
+
+        // منع التمرير على الهاتف
+        document.body.addEventListener('touchmove', function(e) {
+            if (window.innerHeight < 700) {
+                e.preventDefault();
+            }
+        }, { passive: false });
     </script>
 
 </body>
