@@ -74,18 +74,6 @@
       .logo:hover {
         transform: scale(1.05);
       }
-      .phone-container {
-        display: flex;
-        gap: 10px;
-        margin: 15px 0;
-        direction: ltr;
-      }
-      .country-code {
-        flex: 0 0 90px;
-      }
-      .phone-number {
-        flex: 1;
-      }
       .star-rating {
         display: flex;
         justify-content: center;
@@ -102,9 +90,12 @@
         transition: transform 0.2s, color 0.2s;
         color: #cce7ff;
       }
+      .star-rating input:checked ~ label {
+        color: #cce7ff;
+      }
       .star-rating label:hover,
       .star-rating input:checked + label,
-      .star-rating label:hover ~ label {
+      .star-rating:hover label {
         color: #ffcc00;
       }
       .star-rating label:hover {
@@ -112,7 +103,6 @@
       }
       input,
       textarea,
-      select,
       button {
         width: 100%;
         margin: 10px 0;
@@ -123,8 +113,7 @@
         transition: all 0.3s;
       }
       input:focus,
-      textarea:focus,
-      select:focus {
+      textarea:focus {
         outline: none;
         border-color: #0077be;
         box-shadow: 0 0 0 3px rgba(0, 119, 190, 0.2);
@@ -201,11 +190,6 @@
         font-weight: 500;
         color: #0066a4;
       }
-      .phone-label {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
     </style>
   </head>
   <body>
@@ -220,41 +204,28 @@
       <h2>قيمنا واجمع النقاط</h2>
 
       <form id="feedbackForm">
-        <div class="phone-label">
-          <label for="phone">رقم الهاتف:</label>
-        </div>
-        <div class="phone-container">
-          <select id="countryCode" class="country-code" required>
-            <option value="+971">+971</option>
-            <option value="+966">+966</option>
-            <option value="+965">+965</option>
-            <option value="+974">+974</option>
-            <option value="+973">+973</option>
-            <option value="+968">+968</option>
-          </select>
-          <input
-            type="tel"
-            id="phone"
-            class="phone-number"
-            required
-            pattern="[0-9]{7,9}"
-            title="يجب أن يتكون الرقم من 7 إلى 9 أرقام"
-            placeholder="أدخل رقم الهاتف"
-          />
-        </div>
+        <label for="phone">رقم الهاتف:</label>
+        <input
+          type="tel"
+          id="phone"
+          required
+          pattern="05[0-9]{8}"
+          title="يجب أن يبدأ الرقم بـ 05 ويتكون من 10 أرقام"
+          placeholder="أدخل رقم الهاتف (يبدأ بـ 05)"
+        />
 
         <label>ما مدى سعادتك بطعامنا؟</label>
         <div class="star-rating">
-          <input type="radio" id="star1" name="rating" value="1" />
-          <label for="star1">★</label>
-          <input type="radio" id="star2" name="rating" value="2" />
-          <label for="star2">★</label>
-          <input type="radio" id="star3" name="rating" value="3" />
-          <label for="star3">★</label>
-          <input type="radio" id="star4" name="rating" value="4" />
-          <label for="star4">★</label>
           <input type="radio" id="star5" name="rating" value="5" />
           <label for="star5">★</label>
+          <input type="radio" id="star4" name="rating" value="4" />
+          <label for="star4">★</label>
+          <input type="radio" id="star3" name="rating" value="3" />
+          <label for="star3">★</label>
+          <input type="radio" id="star2" name="rating" value="2" />
+          <label for="star2">★</label>
+          <input type="radio" id="star1" name="rating" value="1" />
+          <label for="star1">★</label>
         </div>
 
         <label for="comments"
@@ -284,7 +255,7 @@
       const db = firebase.firestore();
 
       function validatePhoneNumber(phone) {
-        const phoneRegex = /^[0-9]{7,9}$/;
+        const phoneRegex = /^05[0-9]{8}$/;
         return phoneRegex.test(phone);
       }
 
@@ -294,14 +265,48 @@
         document
           .querySelectorAll('input[name="rating"]')
           .forEach((input) => (input.checked = false));
+
+        // إعادة تعيين ألوان النجوم
+        document.querySelectorAll(".star-rating label").forEach((star) => {
+          star.style.color = "#cce7ff";
+        });
       }
+
+      // تحديث ألوان النجوم عند التحديد
+      function updateStarColors() {
+        const stars = document.querySelectorAll(".star-rating label");
+        const checkedStar = document.querySelector(
+          'input[name="rating"]:checked'
+        );
+
+        if (checkedStar) {
+          const checkedIndex = Array.from(stars).indexOf(
+            checkedStar.nextElementSibling
+          );
+          stars.forEach((star, index) => {
+            if (index <= checkedIndex) {
+              star.style.color = "#ffcc00";
+            } else {
+              star.style.color = "#cce7ff";
+            }
+          });
+        } else {
+          stars.forEach((star) => {
+            star.style.color = "#cce7ff";
+          });
+        }
+      }
+
+      // إضافة مستمعات الأحداث للنجوم
+      document.querySelectorAll(".star-rating input").forEach((star) => {
+        star.addEventListener("change", updateStarColors);
+      });
 
       document
         .getElementById("feedbackForm")
         .addEventListener("submit", async function (event) {
           event.preventDefault();
 
-          const countryCode = document.getElementById("countryCode").value;
           const phone = document.getElementById("phone").value.trim();
           const rating = document.querySelector(
             'input[name="rating"]:checked'
@@ -309,7 +314,7 @@
           const comments = document.getElementById("comments").value.trim();
 
           if (!validatePhoneNumber(phone)) {
-            alert("رقم الهاتف غير صحيح. يجب أن يتكون من 7 إلى 9 أرقام.");
+            alert("رقم الهاتف غير صحيح. يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.");
             return;
           }
 
@@ -320,8 +325,7 @@
 
           try {
             const today = new Date().toISOString().split("T")[0];
-            const fullPhone = countryCode + phone;
-            const userRef = db.collection("feedback").doc(fullPhone);
+            const userRef = db.collection("feedback").doc(phone);
             const doc = await userRef.get();
 
             if (doc.exists && doc.data().date === today) {
@@ -334,9 +338,7 @@
 
             await userRef.set(
               {
-                phone: fullPhone,
-                countryCode: countryCode,
-                phoneNumber: phone,
+                phone: phone,
                 rating: parseInt(rating),
                 comments: comments,
                 date: today,
@@ -346,7 +348,7 @@
             );
 
             clearForm();
-            window.location.href = `thankyou.html?phone=${fullPhone}`;
+            window.location.href = `thankyou.html?phone=${phone}`;
           } catch (error) {
             console.error("خطأ أثناء الإرسال:", error);
             alert("حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى لاحقًا.");
@@ -362,28 +364,14 @@
           stars.forEach((s, index) => {
             if (index <= currentIndex) {
               s.style.color = "#ffcc00";
+            } else {
+              s.style.color = "#cce7ff";
             }
           });
         });
 
         star.addEventListener("mouseout", function () {
-          const stars = document.querySelectorAll(".star-rating label");
-          const checkedStar = document.querySelector(
-            'input[name="rating"]:checked'
-          );
-
-          if (checkedStar) {
-            const checkedIndex = Array.from(stars).indexOf(
-              checkedStar.nextElementSibling
-            );
-            stars.forEach((s, index) => {
-              s.style.color = index <= checkedIndex ? "#ffcc00" : "#cce7ff";
-            });
-          } else {
-            stars.forEach((s) => {
-              s.style.color = "#cce7ff";
-            });
-          }
+          updateStarColors();
         });
       });
     </script>
