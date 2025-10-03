@@ -1,176 +1,391 @@
 <!DOCTYPE html>
 <html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Feedback</title>
-    
+
     <!-- استيراد Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
-
-        input, textarea {
-    font-size: 16px; /* منع التكبير في بعض الأجهزة */
-    touch-action: manipulation; /* تحسين التفاعل مع اللمس */
-}
-        body {
-            font-family: "Tajawal", sans-serif;
-            direction: rtl;
-            text-align: center;
-            margin: 10px;
-            background-color: #f8f9fa;
+      input,
+      textarea {
+        font-size: 16px; /* منع التكبير في بعض الأجهزة */
+        touch-action: manipulation; /* تحسين التفاعل مع اللمس */
+      }
+      body {
+        font-family: "Tajawal", sans-serif;
+        direction: rtl;
+        text-align: center;
+        margin: 10px;
+        background: linear-gradient(135deg, #e6f7ff 0%, #b3e0ff 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        max-width: 100%;
+        width: 450px;
+        margin: auto;
+        padding: 30px;
+        border: 1px solid #b3e0ff;
+        border-radius: 15px;
+        background-color: white;
+        box-shadow: 0 10px 25px rgba(0, 119, 190, 0.15);
+        position: relative;
+        overflow: hidden;
+      }
+      .container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(
+          90deg,
+          #0077be 0%,
+          #00a8e8 50%,
+          #4dc6ff 100%
+        );
+      }
+      .logo-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+      .logo {
+        max-width: 180px;
+        transition: transform 0.3s;
+      }
+      .logo:hover {
+        transform: scale(1.05);
+      }
+      .phone-container {
+        display: flex;
+        gap: 10px;
+        margin: 15px 0;
+        direction: ltr;
+      }
+      .country-code {
+        flex: 0 0 90px;
+      }
+      .phone-number {
+        flex: 1;
+      }
+      .star-rating {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+        direction: rtl;
+      }
+      .star-rating input {
+        display: none;
+      }
+      .star-rating label {
+        font-size: 40px;
+        cursor: pointer;
+        transition: transform 0.2s, color 0.2s;
+        color: #cce7ff;
+      }
+      .star-rating label:hover,
+      .star-rating input:checked + label,
+      .star-rating label:hover ~ label {
+        color: #ffcc00;
+      }
+      .star-rating label:hover {
+        transform: scale(1.2);
+      }
+      input,
+      textarea,
+      select,
+      button {
+        width: 100%;
+        margin: 10px 0;
+        padding: 12px 15px;
+        border: 1px solid #b3e0ff;
+        border-radius: 8px;
+        box-sizing: border-box;
+        transition: all 0.3s;
+      }
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: none;
+        border-color: #0077be;
+        box-shadow: 0 0 0 3px rgba(0, 119, 190, 0.2);
+      }
+      button {
+        background: linear-gradient(135deg, #0077be 0%, #00a8e8 100%);
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        font-family: "Tajawal";
+        font-weight: bold;
+        border: none;
+        padding: 15px;
+        margin-top: 20px;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+      button:hover {
+        background: linear-gradient(135deg, #00a8e8 0%, #0077be 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 119, 190, 0.4);
+      }
+      button:active {
+        transform: translateY(0);
+      }
+      button::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 0;
+        border-radius: 100%;
+        transform: scale(1, 1) translate(-50%);
+        transform-origin: 50% 50%;
+      }
+      button:focus:not(:active)::after {
+        animation: ripple 1s ease-out;
+      }
+      @keyframes ripple {
+        0% {
+          transform: scale(0, 0);
+          opacity: 0.5;
         }
-        .container {
-            max-width: 100%;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            background-color: white;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        100% {
+          transform: scale(20, 20);
+          opacity: 0;
         }
-        .logo {
-            max-width: 150px;
-            margin-bottom: 15px;
-        }
-        .emoji-rating {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        .emoji-rating input {
-            display: none;
-        }
-        .emoji-rating label {
-            font-size: 30px;
-            cursor: pointer;
-            transition: transform 0.2s, filter 0.2s;
-            filter: grayscale(100%);
-        }
-        .emoji-rating label:hover, .emoji-rating input:checked + label {
-            transform: scale(1.2);
-            filter: grayscale(0%);
-        }
-        input, textarea, button {
-            width: 100%;
-            margin: 15px 0;
-            padding: 10px 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            font-family: 'Tajawal';
-    font-weight: bold;
-        }
-        button:hover {
-            background-color: #218838;
-        }
+      }
+      h2 {
+        color: #0077be;
+        margin-bottom: 25px;
+        position: relative;
+        display: inline-block;
+      }
+      h2::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 3px;
+        background: linear-gradient(90deg, #0077be 0%, #4dc6ff 100%);
+        border-radius: 3px;
+      }
+      label {
+        display: block;
+        text-align: right;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #0066a4;
+      }
+      .phone-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="container">
-        <img src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png?raw=true" alt="لوجو" class="logo">
-        <h2>قيمنا واجمع النقاط</h2>
-        
-        <form id="feedbackForm">
-            <label for="phone">رقم الهاتف:</label>
-            <input type="tel" id="phone" required pattern="05[0-9]{8}" title="يجب أن يبدأ الرقم بـ 05 ويتكون من 10 أرقام">
+      <div class="logo-container">
+        <img
+          src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png?raw=true"
+          alt="لوجو"
+          class="logo"
+        />
+      </div>
+      <h2>قيمنا واجمع النقاط</h2>
 
-            <label>ما مدى سعادتك بطعامنا؟</label>
-            <div class="emoji-rating">
-                <input type="radio" id="emoji1" name="rating" value="1"><label for="emoji1">😡</label>
-                <input type="radio" id="emoji2" name="rating" value="2"><label for="emoji2">😞</label>
-                <input type="radio" id="emoji3" name="rating" value="3"><label for="emoji3">😐</label>
-                <input type="radio" id="emoji4" name="rating" value="4"><label for="emoji4">😊</label>
-                <input type="radio" id="emoji5" name="rating" value="5"><label for="emoji5">😍</label>
-            </div>
+      <form id="feedbackForm">
+        <div class="phone-label">
+          <label for="phone">رقم الهاتف:</label>
+        </div>
+        <div class="phone-container">
+          <select id="countryCode" class="country-code" required>
+            <option value="+971">+971</option>
+            <option value="+966">+966</option>
+            <option value="+965">+965</option>
+            <option value="+974">+974</option>
+            <option value="+973">+973</option>
+            <option value="+968">+968</option>
+          </select>
+          <input
+            type="tel"
+            id="phone"
+            class="phone-number"
+            required
+            pattern="[0-9]{7,9}"
+            title="يجب أن يتكون الرقم من 7 إلى 9 أرقام"
+            placeholder="أدخل رقم الهاتف"
+          />
+        </div>
 
-            <label for="comments">هل لديك اي ملاحظات أو اقتراحات لتحسين خدماتنا؟</label>
-            <textarea id="comments"></textarea>
+        <label>ما مدى سعادتك بطعامنا؟</label>
+        <div class="star-rating">
+          <input type="radio" id="star1" name="rating" value="1" />
+          <label for="star1">★</label>
+          <input type="radio" id="star2" name="rating" value="2" />
+          <label for="star2">★</label>
+          <input type="radio" id="star3" name="rating" value="3" />
+          <label for="star3">★</label>
+          <input type="radio" id="star4" name="rating" value="4" />
+          <label for="star4">★</label>
+          <input type="radio" id="star5" name="rating" value="5" />
+          <label for="star5">★</label>
+        </div>
 
-            <button type="submit">إرسال التقييم</button>
-        </form>
+        <label for="comments"
+          >هل لديك أي ملاحظات أو اقتراحات لتحسين خدماتنا؟</label
+        >
+        <textarea
+          id="comments"
+          rows="4"
+          placeholder="شاركنا رأيك لنساعدك بشكل أفضل..."
+        ></textarea>
+
+        <button type="submit">إرسال التقييم</button>
+      </form>
     </div>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyB2kh06x0kA-SNA-dU2fu0-66xHsbATBRY",
-            authDomain: "feedback-445b9.firebaseapp.com",
-            projectId: "feedback-445b9",
-            storageBucket: "feedback-445b9.firebasestorage.app",
-            messagingSenderId: "771007711501",
-            appId: "1:771007711501:web:412efa0484ba4d3203c844"
-        };
+      const firebaseConfig = {
+        apiKey: "AIzaSyB2kh06x0kA-SNA-dU2fu0-66xHsbATBRY",
+        authDomain: "feedback-445b9.firebaseapp.com",
+        projectId: "feedback-445b9",
+        storageBucket: "feedback-445b9.firebasestorage.app",
+        messagingSenderId: "771007711501",
+        appId: "1:771007711501:web:412efa0484ba4d3203c844",
+      };
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
 
-        function validatePhoneNumber(phone) {
-            const phoneRegex = /^05\d{8}$/;
-            return phoneRegex.test(phone);
-        }
+      function validatePhoneNumber(phone) {
+        const phoneRegex = /^[0-9]{7,9}$/;
+        return phoneRegex.test(phone);
+      }
 
-        function clearForm() {
-            document.getElementById('phone').value = "";
-            document.getElementById('comments').value = "";
-            document.querySelectorAll('input[name="rating"]').forEach(input => input.checked = false);
-        }
+      function clearForm() {
+        document.getElementById("phone").value = "";
+        document.getElementById("comments").value = "";
+        document
+          .querySelectorAll('input[name="rating"]')
+          .forEach((input) => (input.checked = false));
+      }
 
-        document.getElementById('feedbackForm').addEventListener('submit', async function (event) {
-            event.preventDefault();
+      document
+        .getElementById("feedbackForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
 
-            const phone = document.getElementById('phone').value.trim();
-            const rating = document.querySelector('input[name="rating"]:checked')?.value;
-            const comments = document.getElementById('comments').value.trim();
+          const countryCode = document.getElementById("countryCode").value;
+          const phone = document.getElementById("phone").value.trim();
+          const rating = document.querySelector(
+            'input[name="rating"]:checked'
+          )?.value;
+          const comments = document.getElementById("comments").value.trim();
 
-            if (!validatePhoneNumber(phone)) {
-                alert('رقم الهاتف غير صحيح. يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.');
-                return;
+          if (!validatePhoneNumber(phone)) {
+            alert("رقم الهاتف غير صحيح. يجب أن يتكون من 7 إلى 9 أرقام.");
+            return;
+          }
+
+          if (!rating) {
+            alert("يرجى اختيار تقييم من خلال النجوم.");
+            return;
+          }
+
+          try {
+            const today = new Date().toISOString().split("T")[0];
+            const fullPhone = countryCode + phone;
+            const userRef = db.collection("feedback").doc(fullPhone);
+            const doc = await userRef.get();
+
+            if (doc.exists && doc.data().date === today) {
+              alert("لقد قمت بالتقييم اليوم بالفعل!");
+              return;
             }
 
-            if (!rating) {
-                alert('يرجى ملء جميع الحقول المطلوبة.');
-                return;
-            }
+            let totalPoints =
+              doc.exists && doc.data().points ? doc.data().points + 5 : 5;
 
-            try {
-                const today = new Date().toISOString().split('T')[0];
-                const userRef = db.collection('feedback').doc(phone);
-                const doc = await userRef.get();
+            await userRef.set(
+              {
+                phone: fullPhone,
+                countryCode: countryCode,
+                phoneNumber: phone,
+                rating: parseInt(rating),
+                comments: comments,
+                date: today,
+                points: totalPoints,
+              },
+              { merge: true }
+            );
 
-                if (doc.exists && doc.data().date === today) {
-                    alert("لقد قمت بالتقييم اليوم بالفعل!");
-                    return;
-                }
-
-                let totalPoints = doc.exists && doc.data().points ? doc.data().points + 5 : 5;
-                
-                await userRef.set({
-                    phone: phone,
-                    rating: parseInt(rating),
-                    comments: comments,
-                    date: today,
-                    points: totalPoints
-                }, { merge: true });
-                
-                clearForm();
-                window.location.href = `thankyou.html?phone=${phone}`;
-            } catch (error) {
-                console.error("خطأ أثناء الإرسال:", error);
-                alert("حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى لاحقًا.");
-            }
+            clearForm();
+            window.location.href = `thankyou.html?phone=${fullPhone}`;
+          } catch (error) {
+            console.error("خطأ أثناء الإرسال:", error);
+            alert("حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى لاحقًا.");
+          }
         });
+
+      // تحسين تجربة المستخدم: تمييز النجوم عند المرور عليها
+      document.querySelectorAll(".star-rating label").forEach((star) => {
+        star.addEventListener("mouseover", function () {
+          const stars = document.querySelectorAll(".star-rating label");
+          const currentIndex = Array.from(stars).indexOf(this);
+
+          stars.forEach((s, index) => {
+            if (index <= currentIndex) {
+              s.style.color = "#ffcc00";
+            }
+          });
+        });
+
+        star.addEventListener("mouseout", function () {
+          const stars = document.querySelectorAll(".star-rating label");
+          const checkedStar = document.querySelector(
+            'input[name="rating"]:checked'
+          );
+
+          if (checkedStar) {
+            const checkedIndex = Array.from(stars).indexOf(
+              checkedStar.nextElementSibling
+            );
+            stars.forEach((s, index) => {
+              s.style.color = index <= checkedIndex ? "#ffcc00" : "#cce7ff";
+            });
+          } else {
+            stars.forEach((s) => {
+              s.style.color = "#cce7ff";
+            });
+          }
+        });
+      });
     </script>
-</body>
+  </body>
 </html>
