@@ -137,13 +137,10 @@
         }
         
         .button-container {
-            background: white;
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             margin: 25px auto;
             max-width: 450px;
-            border: 2px solid #f0f0f0;
         }
         
         .button-description {
@@ -168,21 +165,18 @@
     <p>عدد النقاط التي جمعتها حتى الآن:</p>
     <p id="points">... جاري التحميل ...</p>
 
-    <!-- زر الموقع الجديد -->
-    <div class="button-container">
-        <button id="locationButton" class="location-button">
-            📍 قيمنا على جوجل واربح المزيد من النقاط
-        </button>
-        <div class="button-description">
-            اضغط على الزر أعلاه لتقييمنا على جوجل والحصول على فرصة ربح نقاط إضافية
-        </div>
-    </div>
-
     <!-- رسالة تهنئة عند الوصول إلى 100 نقطة -->
     <div id="rewardMessage" class="reward-message"></div>
 
     <!-- رسالة توضح عدد النقاط المتبقية -->
     <div id="remainingPointsMessage" class="remaining-points-message"></div>
+
+     <!-- زر الموقع الجديد -->
+    <div class="button-container">
+        <button id="locationButton" class="location-button">
+            📍 قيمنا على جوجل واربح المزيد من النقاط
+        </button>
+    </div>
 
     <!-- مكتبة تأثير الشرائط المتناثرة -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.0.2"></script>
@@ -280,3 +274,4 @@
 
 </body>
 </html>
+
