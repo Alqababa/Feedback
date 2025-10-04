@@ -104,20 +104,23 @@
             appId: "1:771007711501:web:412efa0484ba4d3203c844"
         };
 
-        // 🔹 تهيئة Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 🟢 استخراج رقم الهاتف من الرابط
         const urlParams = new URLSearchParams(window.location.search);
         const phone = urlParams.get("phone");
 
-        // 🔹 دالة لتسجيل النقرات فقط
+        // 🔹 دالة لتسجيل النقرات مع معلومات تحليلية
         function trackButtonClick() {
+            const now = new Date();
             const clickData = {
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                userAgent: navigator.userAgent,
-                source: 'thankyou_page'
+                source: 'thankyou_page',
+                phone: phone || null,
+                date: now.toISOString().split('T')[0], // YYYY-MM-DD
+                hour: now.getHours(), // 0–23
+                device: /Mobile|Android|iPhone/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
+                browser: navigator.userAgent.match(/(Chrome|Firefox|Safari|Edge|Opera)/i)?.[0] || 'unknown'
             };
 
             db.collection('locationClicks').add(clickData)
@@ -131,7 +134,7 @@
             window.open('https://maps.app.goo.gl/MNkEuaqDoSXXQ4rY8', '_blank');
         }
 
-        // 🔹 تحميل البيانات عند فتح الصفحة
+        // 🔹 تحميل بيانات النقاط عند فتح الصفحة
         document.addEventListener('DOMContentLoaded', function() {
             if (phone) {
                 const userRef = db.collection('feedback').doc(phone);
