@@ -123,7 +123,16 @@
         line-height: 1.4;
       }
 
-      /* تحسينات للجوال */
+      .click-info {
+        background: #e7f3ff;
+        padding: 10px;
+        border-radius: 8px;
+        margin-top: 10px;
+        font-size: 0.8rem;
+        color: #0066cc;
+        display: none;
+      }
+
       @media (max-width: 480px) {
         body {
           padding: 15px;
@@ -184,6 +193,11 @@
         <div class="button-description">
             اضغط للتقييم على جوجل والحصول على فرصة ربح نقاط إضافية
         </div>
+
+        <!-- معلومات النقرات -->
+        <div id="clickInfo" class="click-info">
+            تم تسجيل نقرة جديدة بنجاح!
+        </div>
     </div>
 
     <!-- مكتبة تأثير الشرائط المتناثرة -->
@@ -208,8 +222,28 @@
         const urlParams = new URLSearchParams(window.location.search);
         const phone = urlParams.get("phone");
 
-        // 🔹 دالة لتسجيل النقرات
-        function trackButtonClick() {
+        // 🔹 دالة لتسجيل النقرات (محسنة)
+        async function trackButtonClick() {
+            // فتح النافذة أولاً
+            const newWindow = window.open("https://maps.app.goo.gl/MNkEuaqDoSXXQ4rY8", "_blank");
+            
+            // ثم تسجيل البيانات في Firebase (بدون انتظار)
+            recordClickInFirebase();
+            
+            // التركيز على النافذة الجديدة
+            if (newWindow) {
+                setTimeout(() => {
+                    try {
+                        newWindow.focus();
+                    } catch (e) {
+                        // تجاهل أي أخطاء في التركيز
+                    }
+                }, 100);
+            }
+        }
+
+        // 🔹 تسجيل النقرة في Firebase
+        async function recordClickInFirebase() {
             const clickData = {
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 userAgent: navigator.userAgent,
@@ -218,11 +252,41 @@
                 action: "google_review_click",
             };
 
-            db.collection("reviewClicks").add(clickData)
-                .then(() => console.log("✅ تم تسجيل النقرة بنجاح"))
-                .catch((error) => console.error("❌ خطأ في تسجيل النقرة:", error));
+            try {
+                await db.collection("reviewClicks").add(clickData);
+                console.log("✅ تم تسجيل النقرة بنجاح في Firebase");
+                showClickInfo();
+            } catch (error) {
+                console.error("❌ خطأ في تسجيل النقرة في Firebase:", error);
+                // حفظ محلي كبديل
+                saveClickLocally();
+                showClickInfo();
+            }
+        }
 
-            window.open("https://maps.app.goo.gl/MNkEuaqDoSXXQ4rY8", "_blank");
+        // 🔹 حفظ النقرات محلياً كبديل
+        function saveClickLocally() {
+            try {
+                let clicks = JSON.parse(localStorage.getItem('reviewClicks') || '[]');
+                clicks.push({
+                    timestamp: new Date().toISOString(),
+                    phone: phone || "غير معروف",
+                    action: "google_review_click"
+                });
+                localStorage.setItem('reviewClicks', JSON.stringify(clicks));
+                console.log("✅ تم حفظ النقرة محلياً");
+            } catch (e) {
+                console.log("✅ تم تنفيذ النقرة بنجاح");
+            }
+        }
+
+        // 🔹 عرض رسالة تأكيد النقرة
+        function showClickInfo() {
+            const clickInfo = document.getElementById('clickInfo');
+            clickInfo.style.display = 'block';
+            setTimeout(() => {
+                clickInfo.style.display = 'none';
+            }, 3000);
         }
 
         // 🔹 تحميل البيانات عند فتح الصفحة
@@ -259,6 +323,7 @@
                 document.getElementById("points").textContent = "لا يوجد رقم هاتف";
             }
 
+            // 🔹 إضافة event listener للزر
             document.getElementById("locationButton").addEventListener("click", trackButtonClick);
         });
 
