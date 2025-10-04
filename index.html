@@ -110,7 +110,7 @@
         justify-content: center;
         gap: 8px;
         margin: 10px 0;
-        direction: ltr; /* اتجاه من اليمين لليسار */
+        direction: rtl;
       }
 
       .star-rating input {
@@ -123,15 +123,10 @@
         transition: all 0.2s;
         color: #ddd;
         margin: 0;
-        order: 1; /* تأكد من أن الترتيب صحيح */
       }
 
-      /* عندما يتم تحديد نجمة، يتم تلوينها وجميع النجوم على يمينها */
-      .star-rating input:checked ~ label {
-        color: #ffcc00;
-      }
-
-      /* تأثير hover */
+      /* النجوم المحددة والتحويم */
+      .star-rating input:checked ~ label,
       .star-rating label:hover,
       .star-rating label:hover ~ label {
         color: #ffcc00;
@@ -158,6 +153,13 @@
         box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
       }
 
+      .submit-button:disabled {
+        background: #cccccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
       .rating-description {
         color: #666;
         font-size: 0.85rem;
@@ -170,6 +172,12 @@
         font-weight: bold;
         font-size: 0.8rem;
         margin-top: 5px;
+      }
+
+      .loading {
+        display: none;
+        color: #007bff;
+        margin: 10px 0;
       }
 
       /* تحسينات للجوال */
@@ -230,7 +238,6 @@
           <label>ما مدى سعادتك بطعامنا؟</label>
           <div class="star-rating">
             <!-- النجوم من اليمين لليسار: 1 ← 2 ← 3 ← 4 ← 5 -->
-            <!-- اليمين: نجمة 1، اليسار: نجمة 5 -->
             <input type="radio" id="star5" name="rating" value="5" />
             <label for="star5" title="ممتاز">★</label>
             
@@ -246,6 +253,9 @@
             <input type="radio" id="star1" name="rating" value="1" />
             <label for="star1" title="ضعيف">★</label>
           </div>
+          <div class="rating-description">
+            <span class="star-value" id="starValue">اختر تقييمك من 1 إلى 5 نجوم</span>
+          </div>
         </div>
 
         <div class="form-group">
@@ -257,7 +267,9 @@
           ></textarea>
         </div>
 
-        <button type="submit" class="submit-button">إرسال التقييم</button>
+        <div class="loading" id="loading">جاري الإرسال...</div>
+
+        <button type="submit" class="submit-button" id="submitButton">إرسال التقييم</button>
       </form>
     </div>
 
@@ -271,8 +283,15 @@
         appId: "1:771007711501:web:412efa0484ba4d3203c844",
       };
 
+      // تهيئة Firebase
       firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
+
+      // العناصر الأساسية
+      const feedbackForm = document.getElementById("feedbackForm");
+      const starValueElement = document.getElementById("starValue");
+      const loadingElement = document.getElementById("loading");
+      const submitButton = document.getElementById("submitButton");
 
       function validatePhoneNumber(phone) {
         const phoneRegex = /^05[0-9]{8}$/;
@@ -282,16 +301,26 @@
       function clearForm() {
         document.getElementById("phone").value = "";
         document.getElementById("comments").value = "";
+        
+        // إعادة تعيين النجوم
         document.querySelectorAll('input[name="rating"]').forEach((input) => {
           input.checked = false;
         });
-        updateStarDisplay();
+        
+        // إعادة تعيين ألوان النجوم
+        document.querySelectorAll(".star-rating label").forEach((star) => {
+          star.style.color = "#ddd";
+        });
+        
+        // تحديث العرض بعد تأخير بسيط
+        setTimeout(updateStarDisplay, 100);
       }
 
-      // تحديث عرض النجوم والقيمة
+      // تحديث عرض النجوم والقيمة - مع التحقق من وجود العنصر
       function updateStarDisplay() {
+        if (!starValueElement) return;
+        
         const checkedStar = document.querySelector('input[name="rating"]:checked');
-        const starValue = document.getElementById('starValue');
         
         if (checkedStar) {
           const value = checkedStar.value;
@@ -302,46 +331,48 @@
             '4': '⭐⭐⭐⭐ تقييم: 4/5 - جيد جداً',
             '5': '⭐⭐⭐⭐⭐ تقييم: 5/5 - ممتاز'
           };
-          starValue.textContent = descriptions[value];
-          starValue.style.color = '#28a745';
+          starValueElement.textContent = descriptions[value] || 'تقييم: ' + value + '/5';
+          starValueElement.style.color = '#28a745';
         } else {
-          starValue.textContent = 'اختر تقييمك من 1 إلى 5 نجوم';
-          starValue.style.color = '#007bff';
+          starValueElement.textContent = 'اختر تقييمك من 1 إلى 5 نجوم';
+          starValueElement.style.color = '#007bff';
         }
       }
 
       // إضافة مستمعات الأحداث للنجوم
-      document.querySelectorAll(".star-rating input").forEach((star) => {
-        star.addEventListener("change", updateStarDisplay);
-        
-        star.addEventListener("mouseover", function() {
-          const stars = document.querySelectorAll(".star-rating label");
-          const currentIndex = Array.from(stars).indexOf(this.nextElementSibling);
+      function initializeStarEvents() {
+        document.querySelectorAll(".star-rating input").forEach((star) => {
+          star.addEventListener("change", updateStarDisplay);
           
-          // تلوين النجوم من اليمين إلى النجمة الحالية
-          stars.forEach((star, index) => {
-            if (index >= currentIndex) {
-              star.style.color = "#ffcc00";
+          star.addEventListener("mouseover", function() {
+            const stars = document.querySelectorAll(".star-rating label");
+            const currentIndex = Array.from(stars).indexOf(this.nextElementSibling);
+            
+            stars.forEach((star, index) => {
+              if (index >= currentIndex) {
+                star.style.color = "#ffcc00";
+              }
+            });
+          });
+          
+          star.addEventListener("mouseout", function() {
+            const checkedStar = document.querySelector('input[name="rating"]:checked');
+            const stars = document.querySelectorAll(".star-rating label");
+            
+            if (checkedStar) {
+              const checkedIndex = Array.from(stars).indexOf(checkedStar.nextElementSibling);
+              stars.forEach((star, index) => {
+                star.style.color = index >= checkedIndex ? "#ffcc00" : "#ddd";
+              });
+            } else {
+              stars.forEach(star => star.style.color = "#ddd");
             }
           });
         });
-        
-        star.addEventListener("mouseout", function() {
-          const checkedStar = document.querySelector('input[name="rating"]:checked');
-          const stars = document.querySelectorAll(".star-rating label");
-          
-          if (checkedStar) {
-            const checkedIndex = Array.from(stars).indexOf(checkedStar.nextElementSibling);
-            stars.forEach((star, index) => {
-              star.style.color = index >= checkedIndex ? "#ffcc00" : "#ddd";
-            });
-          } else {
-            stars.forEach(star => star.style.color = "#ddd");
-          }
-        });
-      });
+      }
 
-      document.getElementById("feedbackForm").addEventListener("submit", async function (event) {
+      // معالجة إرسال النموذج
+      async function handleFormSubmit(event) {
         event.preventDefault();
 
         const phone = document.getElementById("phone").value.trim();
@@ -359,12 +390,20 @@
         }
 
         try {
+          // إظهار التحميل وتعطيل الزر
+          loadingElement.style.display = 'block';
+          submitButton.disabled = true;
+          submitButton.textContent = 'جاري الإرسال...';
+
           const today = new Date().toISOString().split("T")[0];
           const userRef = db.collection("feedback").doc(phone);
           const doc = await userRef.get();
 
           if (doc.exists && doc.data().date === today) {
             alert("لقد قمت بالتقييم اليوم بالفعل!");
+            loadingElement.style.display = 'none';
+            submitButton.disabled = false;
+            submitButton.textContent = 'إرسال التقييم';
             return;
           }
 
@@ -383,18 +422,31 @@
 
           clearForm();
           window.location.href = `thankyou.html?phone=${phone}`;
+
         } catch (error) {
           console.error("خطأ أثناء الإرسال:", error);
           alert("حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى لاحقًا.");
+          
+          // إعادة تمكين الزر
+          loadingElement.style.display = 'none';
+          submitButton.disabled = false;
+          submitButton.textContent = 'إرسال التقييم';
+        }
+      }
+
+      // تهيئة الصفحة عند التحميل
+      document.addEventListener("DOMContentLoaded", function() {
+        // التحقق من وجود العناصر قبل استخدامها
+        if (feedbackForm && starValueElement) {
+          initializeStarEvents();
+          updateStarDisplay();
+          
+          feedbackForm.addEventListener("submit", handleFormSubmit);
+        } else {
+          console.error("عناصر الصفحة غير موجودة");
         }
       });
 
-      // تهيئة عرض النجوم عند تحميل الصفحة
-      document.addEventListener("DOMContentLoaded", function() {
-        updateStarDisplay();
-      });
     </script>
   </body>
 </html>
-
-
