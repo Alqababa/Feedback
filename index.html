@@ -20,175 +20,197 @@
     />
 
     <style>
-      input,
-      textarea {
-        font-size: 16px; /* منع التكبير في بعض الأجهزة */
-        touch-action: manipulation; /* تحسين التفاعل مع اللمس */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
+
       body {
         font-family: "Tajawal", sans-serif;
-        direction: rtl;
         text-align: center;
-        margin: 10px;
-        background: linear-gradient(135deg, #e6f7ff 0%, #b3e0ff 100%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
+        padding: 20px;
         display: flex;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        justify-content: center;
       }
+
       .container {
-        max-width: 100%;
-        width: 450px;
-        margin: auto;
-        padding: 30px;
-        border: 1px solid #b3e0ff;
-        border-radius: 15px;
-        background-color: white;
-        box-shadow: 0 10px 25px rgba(0, 119, 190, 0.15);
-        position: relative;
-        overflow: hidden;
+        background: white;
+        border-radius: 20px;
+        padding: 30px 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        width: 100%;
+        margin: 0 auto;
       }
-      .container::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 5px;
-        background: linear-gradient(
-          90deg,
-          #0077be 0%,
-          #00a8e8 50%,
-          #4dc6ff 100%
-        );
-      }
+
       .logo-container {
-        display: flex;
-        justify-content: center;
+        position: relative;
         margin-bottom: 20px;
       }
+
       .logo {
-        max-width: 180px;
-        transition: transform 0.3s;
+        width: 120px;
+        height: 120px;
+        animation: float 3s ease-in-out infinite;
+        filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
       }
-      .logo:hover {
-        transform: scale(1.05);
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-8px) rotate(1deg); }
       }
-      .star-rating {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin: 20px 0;
-        direction: rtl;
+
+      h2 {
+        color: #28a745;
+        margin-bottom: 15px;
+        font-size: 1.4rem;
       }
-      .star-rating input {
-        display: none;
+
+      .form-group {
+        margin-bottom: 20px;
+        text-align: right;
       }
-      .star-rating label {
-        font-size: 40px;
-        cursor: pointer;
-        transition: transform 0.2s, color 0.2s;
-        color: #cce7ff;
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #333;
+        font-size: 1rem;
       }
-      .star-rating input:checked ~ label {
-        color: #cce7ff;
-      }
-      .star-rating label:hover,
-      .star-rating input:checked + label,
-      .star-rating:hover label {
-        color: #ffcc00;
-      }
-      .star-rating label:hover {
-        transform: scale(1.2);
-      }
+
       input,
-      textarea,
-      button {
+      textarea {
         width: 100%;
-        margin: 10px 0;
         padding: 12px 15px;
-        border: 1px solid #b3e0ff;
-        border-radius: 8px;
-        box-sizing: border-box;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        font-family: "Tajawal", sans-serif;
         transition: all 0.3s;
+        background: #f8f9fa;
       }
+
       input:focus,
       textarea:focus {
         outline: none;
-        border-color: #0077be;
-        box-shadow: 0 0 0 3px rgba(0, 119, 190, 0.2);
+        border-color: #007bff;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
       }
-      button {
-        background: linear-gradient(135deg, #0077be 0%, #00a8e8 100%);
-        color: white;
-        font-size: 18px;
+
+      /* تصميم النجوم من اليمين لليسار */
+      .star-rating {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        margin: 15px 0;
+        direction: ltr; /* النجوم من اليسار لليمين */
+      }
+
+      .star-rating input {
+        display: none;
+      }
+
+      .star-rating label {
+        font-size: 35px;
         cursor: pointer;
-        font-family: "Tajawal";
-        font-weight: bold;
+        transition: all 0.2s;
+        color: #ddd;
+        margin: 0;
+      }
+
+      /* النجوم المملوءة */
+      .star-rating input:checked ~ label {
+        color: #ffcc00;
+      }
+
+      .star-rating label:hover,
+      .star-rating label:hover ~ label {
+        color: #ffcc00;
+      }
+
+      .star-rating input:checked + label {
+        color: #ffcc00;
+      }
+
+      .submit-button {
+        background: linear-gradient(135deg, #ff6b00, #ff8c00);
+        color: white;
         border: none;
-        padding: 15px;
-        margin-top: 20px;
+        padding: 18px 25px;
+        font-size: 1.1rem;
+        border-radius: 12px;
+        cursor: pointer;
+        margin: 20px 0 10px;
+        font-family: "Tajawal", sans-serif;
         transition: all 0.3s;
-        position: relative;
-        overflow: hidden;
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
+        width: 100%;
       }
-      button:hover {
-        background: linear-gradient(135deg, #00a8e8 0%, #0077be 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 119, 190, 0.4);
+
+      .submit-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
       }
-      button:active {
-        transform: translateY(0);
+
+      .submit-button:active {
+        transform: translateY(-1px);
       }
-      button::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 5px;
-        height: 5px;
-        background: rgba(255, 255, 255, 0.5);
-        opacity: 0;
-        border-radius: 100%;
-        transform: scale(1, 1) translate(-50%);
-        transform-origin: 50% 50%;
+
+      .rating-description {
+        color: #666;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        text-align: center;
       }
-      button:focus:not(:active)::after {
-        animation: ripple 1s ease-out;
+
+      .star-value {
+        color: #007bff;
+        font-weight: bold;
+        font-size: 0.8rem;
+        margin-top: 5px;
       }
-      @keyframes ripple {
-        0% {
-          transform: scale(0, 0);
-          opacity: 0.5;
+
+      /* تحسينات للجوال */
+      @media (max-width: 480px) {
+        body {
+          padding: 15px;
         }
-        100% {
-          transform: scale(20, 20);
-          opacity: 0;
+        
+        .container {
+          padding: 25px 15px;
+          border-radius: 15px;
         }
-      }
-      h2 {
-        color: #0077be;
-        margin-bottom: 25px;
-        position: relative;
-        display: inline-block;
-      }
-      h2::after {
-        content: "";
-        position: absolute;
-        bottom: -10px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 50px;
-        height: 3px;
-        background: linear-gradient(90deg, #0077be 0%, #4dc6ff 100%);
-        border-radius: 3px;
-      }
-      label {
-        display: block;
-        text-align: right;
-        margin-bottom: 8px;
-        font-weight: 500;
-        color: #0066a4;
+        
+        .logo {
+          width: 100px;
+          height: 100px;
+        }
+        
+        h2 {
+          font-size: 1.2rem;
+        }
+        
+        .star-rating label {
+          font-size: 30px;
+        }
+        
+        .submit-button {
+          padding: 16px 20px;
+          font-size: 1rem;
+        }
+        
+        input, textarea {
+          padding: 10px 12px;
+          font-size: 16px;
+        }
       }
     </style>
   </head>
@@ -201,43 +223,52 @@
           class="logo"
         />
       </div>
-      <h2>قيمنا واجمع النقاط</h2>
+
+      <h2>🎯 قيمنا واجمع النقاط</h2>
 
       <form id="feedbackForm">
-        <label for="phone">رقم الهاتف:</label>
-        <input
-          type="tel"
-          id="phone"
-          required
-          pattern="05[0-9]{8}"
-          title="يجب أن يبدأ الرقم بـ 05 ويتكون من 10 أرقام"
-          placeholder="أدخل رقم الهاتف (يبدأ بـ 05)"
-        />
-
-        <label>ما مدى سعادتك بطعامنا؟</label>
-        <div class="star-rating">
-          <input type="radio" id="star5" name="rating" value="5" />
-          <label for="star5">★</label>
-          <input type="radio" id="star4" name="rating" value="4" />
-          <label for="star4">★</label>
-          <input type="radio" id="star3" name="rating" value="3" />
-          <label for="star3">★</label>
-          <input type="radio" id="star2" name="rating" value="2" />
-          <label for="star2">★</label>
-          <input type="radio" id="star1" name="rating" value="1" />
-          <label for="star1">★</label>
+        <div class="form-group">
+          <label for="phone">رقم الهاتف:</label>
+          <input
+            type="tel"
+            id="phone"
+            required
+            pattern="05[0-9]{8}"
+            title="يجب أن يبدأ الرقم بـ 05 ويتكون من 10 أرقام"
+            placeholder="أدخل رقم الهاتف (يبدأ بـ 05)"
+          />
         </div>
 
-        <label for="comments"
-          >هل لديك أي ملاحظات أو اقتراحات لتحسين خدماتنا؟</label
-        >
-        <textarea
-          id="comments"
-          rows="4"
-          placeholder="شاركنا رأيك لنساعدك بشكل أفضل..."
-        ></textarea>
+        <div class="form-group">
+          <label>ما مدى سعادتك بطعامنا؟</label>
+          <div class="star-rating">
+            <!-- النجوم من اليمين لليسار: 1 ← 2 ← 3 ← 4 ← 5 -->
+            <input type="radio" id="star1" name="rating" value="1" />
+            <label for="star1">★</label>
+            <input type="radio" id="star2" name="rating" value="2" />
+            <label for="star2">★</label>
+            <input type="radio" id="star3" name="rating" value="3" />
+            <label for="star3">★</label>
+            <input type="radio" id="star4" name="rating" value="4" />
+            <label for="star4">★</label>
+            <input type="radio" id="star5" name="rating" value="5" />
+            <label for="star5">★</label>
+          </div>
+          <div class="rating-description">
+            <span class="star-value" id="starValue">1 = منخفض, 5 = ممتاز</span>
+          </div>
+        </div>
 
-        <button type="submit">إرسال التقييم</button>
+        <div class="form-group">
+          <label for="comments">ملاحظاتك أو اقتراحاتك:</label>
+          <textarea
+            id="comments"
+            rows="3"
+            placeholder="شاركنا رأيك لنساعدك بشكل أفضل..."
+          ></textarea>
+        </div>
+
+        <button type="submit" class="submit-button">إرسال التقييم</button>
       </form>
     </div>
 
@@ -262,117 +293,117 @@
       function clearForm() {
         document.getElementById("phone").value = "";
         document.getElementById("comments").value = "";
-        document
-          .querySelectorAll('input[name="rating"]')
-          .forEach((input) => (input.checked = false));
-
-        // إعادة تعيين ألوان النجوم
-        document.querySelectorAll(".star-rating label").forEach((star) => {
-          star.style.color = "#cce7ff";
+        document.querySelectorAll('input[name="rating"]').forEach((input) => {
+          input.checked = false;
         });
+        updateStarDisplay();
       }
 
-      // تحديث ألوان النجوم عند التحديد
-      function updateStarColors() {
-        const stars = document.querySelectorAll(".star-rating label");
-        const checkedStar = document.querySelector(
-          'input[name="rating"]:checked'
-        );
-
+      // تحديث عرض النجوم والقيمة
+      function updateStarDisplay() {
+        const checkedStar = document.querySelector('input[name="rating"]:checked');
+        const starValue = document.getElementById('starValue');
+        
         if (checkedStar) {
-          const checkedIndex = Array.from(stars).indexOf(
-            checkedStar.nextElementSibling
-          );
-          stars.forEach((star, index) => {
-            if (index <= checkedIndex) {
-              star.style.color = "#ffcc00";
-            } else {
-              star.style.color = "#cce7ff";
-            }
-          });
+          const value = checkedStar.value;
+          const descriptions = {
+            '1': '1 = غير راضي',
+            '2': '2 = مقبول', 
+            '3': '3 = جيد',
+            '4': '4 = جيد جداً',
+            '5': '5 = ممتاز'
+          };
+          starValue.textContent = descriptions[value];
+          starValue.style.color = '#28a745';
         } else {
-          stars.forEach((star) => {
-            star.style.color = "#cce7ff";
-          });
+          starValue.textContent = '1 = منخفض, 5 = ممتاز';
+          starValue.style.color = '#007bff';
         }
       }
 
       // إضافة مستمعات الأحداث للنجوم
       document.querySelectorAll(".star-rating input").forEach((star) => {
-        star.addEventListener("change", updateStarColors);
-      });
-
-      document
-        .getElementById("feedbackForm")
-        .addEventListener("submit", async function (event) {
-          event.preventDefault();
-
-          const phone = document.getElementById("phone").value.trim();
-          const rating = document.querySelector(
-            'input[name="rating"]:checked'
-          )?.value;
-          const comments = document.getElementById("comments").value.trim();
-
-          if (!validatePhoneNumber(phone)) {
-            alert("رقم الهاتف غير صحيح. يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.");
-            return;
-          }
-
-          if (!rating) {
-            alert("يرجى اختيار تقييم من خلال النجوم.");
-            return;
-          }
-
-          try {
-            const today = new Date().toISOString().split("T")[0];
-            const userRef = db.collection("feedback").doc(phone);
-            const doc = await userRef.get();
-
-            if (doc.exists && doc.data().date === today) {
-              alert("لقد قمت بالتقييم اليوم بالفعل!");
-              return;
-            }
-
-            let totalPoints =
-              doc.exists && doc.data().points ? doc.data().points + 5 : 5;
-
-            await userRef.set(
-              {
-                phone: phone,
-                rating: parseInt(rating),
-                comments: comments,
-                date: today,
-                points: totalPoints,
-              },
-              { merge: true }
-            );
-
-            clearForm();
-            window.location.href = `thankyou.html?phone=${phone}`;
-          } catch (error) {
-            console.error("خطأ أثناء الإرسال:", error);
-            alert("حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى لاحقًا.");
-          }
-        });
-
-      // تحسين تجربة المستخدم: تمييز النجوم عند المرور عليها
-      document.querySelectorAll(".star-rating label").forEach((star) => {
-        star.addEventListener("mouseover", function () {
+        star.addEventListener("change", updateStarDisplay);
+        
+        star.addEventListener("mouseover", function() {
           const stars = document.querySelectorAll(".star-rating label");
-          const currentIndex = Array.from(stars).indexOf(this);
-
-          stars.forEach((s, index) => {
-            if (index <= currentIndex) {
-              s.style.color = "#ffcc00";
-            } else {
-              s.style.color = "#cce7ff";
+          const currentIndex = Array.from(stars).indexOf(this.nextElementSibling);
+          
+          stars.forEach((star, index) => {
+            if (index >= currentIndex) {
+              star.style.color = "#ffcc00";
             }
           });
         });
-
-        star.addEventListener("mouseout", function () {
-          updateStarColors();
+        
+        star.addEventListener("mouseout", function() {
+          updateStarDisplay();
+          // إعادة تعيين الألوان بناءً على التحديد الحالي
+          const checkedStar = document.querySelector('input[name="rating"]:checked');
+          const stars = document.querySelectorAll(".star-rating label");
+          
+          if (checkedStar) {
+            const checkedIndex = Array.from(stars).indexOf(checkedStar.nextElementSibling);
+            stars.forEach((star, index) => {
+              star.style.color = index >= checkedIndex ? "#ffcc00" : "#ddd";
+            });
+          } else {
+            stars.forEach(star => star.style.color = "#ddd");
+          }
         });
+      });
+
+      document.getElementById("feedbackForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const phone = document.getElementById("phone").value.trim();
+        const rating = document.querySelector('input[name="rating"]:checked')?.value;
+        const comments = document.getElementById("comments").value.trim();
+
+        if (!validatePhoneNumber(phone)) {
+          alert("رقم الهاتف غير صحيح. يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.");
+          return;
+        }
+
+        if (!rating) {
+          alert("يرجى اختيار تقييم من خلال النجوم.");
+          return;
+        }
+
+        try {
+          const today = new Date().toISOString().split("T")[0];
+          const userRef = db.collection("feedback").doc(phone);
+          const doc = await userRef.get();
+
+          if (doc.exists && doc.data().date === today) {
+            alert("لقد قمت بالتقييم اليوم بالفعل!");
+            return;
+          }
+
+          let totalPoints = doc.exists && doc.data().points ? doc.data().points + 5 : 5;
+
+          await userRef.set(
+            {
+              phone: phone,
+              rating: parseInt(rating),
+              comments: comments,
+              date: today,
+              points: totalPoints,
+            },
+            { merge: true }
+          );
+
+          clearForm();
+          window.location.href = `thankyou.html?phone=${phone}`;
+        } catch (error) {
+          console.error("خطأ أثناء الإرسال:", error);
+          alert("حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى لاحقًا.");
+        }
+      });
+
+      // تهيئة عرض النجوم عند تحميل الصفحة
+      document.addEventListener("DOMContentLoaded", function() {
+        updateStarDisplay();
       });
     </script>
   </body>
