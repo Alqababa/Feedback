@@ -14,243 +14,86 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: "Tajawal", sans-serif;
-            direction: rtl;
             text-align: center;
-            margin: 0;
-            padding: 15px;
-            background: linear-gradient(135deg, #e6f7ff 0%, #b3e0ff 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .container {
-            max-width: 95%;
-            width: 400px;
-            padding: 20px;
-            border: 1px solid #b3e0ff;
-            border-radius: 15px;
-            background-color: white;
-            box-shadow: 0 10px 25px rgba(0, 119, 190, 0.15);
-            position: relative;
-            z-index: 10;
-        }
-
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #0077be 0%, #00a8e8 50%, #4dc6ff 100%);
-        }
-
-        .logo-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
+            margin: 50px;
+            background-color: #f8f9fa;
         }
 
         .logo {
-            max-width: 140px;
-            transition: transform 0.3s;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        h2 {
-            color: #0077be;
+            max-width: 150px;
             margin-bottom: 15px;
-            font-size: 1.4rem;
-            position: relative;
-            display: inline-block;
         }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 3px;
-            background: linear-gradient(90deg, #0077be 0%, #4dc6ff 100%);
-            border-radius: 3px;
+        h2 {
+            color: #28a745;
         }
-
-        .points-container {
-            background: linear-gradient(135deg, #e6f7ff 0%, #cce7ff 100%);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            border: 2px dashed #0077be;
-        }
-
         #points {
-            font-size: 2.5rem;
+            font-size: 40px;
             font-weight: bold;
-            color: #0077be;
-            margin: 8px 0;
-            text-shadow: 1px 1px 3px rgba(0, 119, 190, 0.2);
+            color: #007bff;
         }
-
-        .points-label {
-            font-size: 1rem;
-            color: #0066a4;
-            margin-bottom: 8px;
-        }
-
         .reward-message, .remaining-points-message {
-            background: linear-gradient(135deg, #ffeb3b 0%, #ffcc00 100%);
-            color: #8a6d00;
-            padding: 12px;
-            border-radius: 10px;
-            margin: 15px 0;
-            font-size: 0.9rem;
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 18px;
             font-weight: bold;
-            border: 1px solid #ffcc00;
-            box-shadow: 0 3px 10px rgba(255, 204, 0, 0.3);
             display: none;
         }
-
-        .phone-highlight {
-            background-color: #0077be;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-
-        .google-review-btn {
-            background: linear-gradient(135deg, #0077be 0%, #00a8e8 100%);
+        
+        /* تصميم الزر الجديد */
+        .location-button {
+            background-color: #007bff;
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin: 15px 0;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(0, 119, 190, 0.3);
-            width: 100%;
-        }
-
-        .google-review-btn:hover {
-            background: linear-gradient(135deg, #00a8e8 0%, #0077be 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 119, 190, 0.4);
-        }
-
-        .google-review-btn:active {
-            transform: translateY(0);
-        }
-
-        .review-text {
-            background-color: #f0f8ff;
-            border-radius: 10px;
-            padding: 12px;
-            margin: 15px 0;
-            border-left: 4px solid #0077be;
-        }
-
-        .encouragement-text {
-            font-size: 0.9rem;
-            color: #0066a4;
-            line-height: 1.5;
-        }
-
-        .star-icon {
-            color: #ffcc00;
-            font-size: 1.2rem;
-        }
-
-        /* تأثير الكونفيتي */
-        #confetti-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .stats-info {
-            background: #f8f9fa;
+            padding: 12px 24px;
+            font-size: 18px;
             border-radius: 8px;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 0.8rem;
+            cursor: pointer;
+            margin: 20px 0;
+            font-family: "Tajawal", sans-serif;
+            transition: background-color 0.3s;
+        }
+        
+        .location-button:hover {
+            background-color: #0056b3;
+        }
+        
+        .click-count {
+            margin-top: 10px;
+            font-size: 14px;
             color: #666;
-            border: 1px solid #e9ecef;
         }
     </style>
 </head>
 <body>
-    <!-- عنصر الكانفاس للكونفيتي -->
-    <canvas id="confetti-canvas"></canvas>
-    
-    <div class="container">
-        <div class="logo-container">
-            <img src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png?raw=true" alt="لوجو" class="logo">
-        </div>
-        
-        <h2>🎉 شكرًا لك على تقييمك! 🎉</h2>
-        
-        <div class="points-container">
-            <div class="points-label">عدد النقاط التي جمعتها حتى الآن:</div>
-            <div id="points">... جاري التحميل ...</div>
-        </div>
 
-        <!-- رسالة تهنئة عند الوصول إلى 50 نقطة -->
-        <div id="rewardMessage" class="reward-message"></div>
+    <img src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png?raw=true" alt="لوجو" class="logo">
+    <h2>🎉 شكرًا لك على تقييمك! 🎉</h2>
+    <p>عدد النقاط التي جمعتها حتى الآن:</p>
+    <p id="points">... جاري التحميل ...</p>
 
-        <!-- رسالة توضح عدد النقاط المتبقية -->
-        <div id="remainingPointsMessage" class="remaining-points-message"></div>
+    <!-- زر الموقع الجديد -->
+    <button id="locationButton" class="location-button">
+        🗺️ اضغط هنا لزيارة موقعنا
+    </button>
+    <div id="clickCount" class="click-count"></div>
 
-        <!-- نص تشجيعي -->
-        <div class="review-text">
-            <div class="encouragement-text">
-                <span class="star-icon">★</span> رقم هاتفك <span id="userPhone" class="phone-highlight">...</span> مميز جداً!<br>
-                أنت تجمع النقاط بسرعة رائعة!
-            </div>
-        </div>
+    <!-- رسالة تهنئة عند الوصول إلى 100 نقطة -->
+    <div id="rewardMessage" class="reward-message"></div>
 
-        <!-- زر التقييم على جوجل -->
-        <button class="google-review-btn" id="googleReviewBtn">
-            <span>⭐</span>
-            اضغط هنا لتقييمنا على جوجل
-            <span>⭐</span>
-        </button>
+    <!-- رسالة توضح عدد النقاط المتبقية -->
+    <div id="remainingPointsMessage" class="remaining-points-message"></div>
 
-        <div class="stats-info" id="statsInfo">
-            📊 سيتم تسجيل نقاط إضافية عند تقييمك على جوجل
-        </div>
-    </div>
+    <!-- مكتبة تأثير الشرائط المتناثرة -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.0.2"></script>
 
     <script>
         // 🔹 إعداد Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyB2kh06x0kA-SNA-dU2fu0-66xHsbATBRY",
+            apiKey: "AIzaSyBkh06x0kA-SNA-dU2fu0-66xHsbATBRY",
             authDomain: "feedback-445b9.firebaseapp.com",
             projectId: "feedback-445b9",
             storageBucket: "feedback-445b9.firebasestorage.app",
@@ -266,154 +109,92 @@
         const urlParams = new URLSearchParams(window.location.search);
         const phone = urlParams.get("phone");
 
-        // 🎉 تأثير الكونفيتي المخصص
-        function launchConfetti() {
-            const canvas = document.getElementById('confetti-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        // 🔹 متغيرات لتخزين البيانات
+        let userPoints = 0;
+        let totalClicks = 0;
 
-            const confettiPieces = [];
-            const colors = ['#0077be', '#00a8e8', '#4dc6ff', '#ffcc00', '#28a745', '#dc3545'];
-            
-            // إنشاء قطع الكونفيتي
-            for (let i = 0; i < 120; i++) {
-                confettiPieces.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height - canvas.height,
-                    size: Math.random() * 8 + 4,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    speed: Math.random() * 3 + 2,
-                    angle: Math.random() * 360,
-                    rotation: Math.random() * 360,
-                    rotationSpeed: Math.random() * 8 - 4
-                });
-            }
-
-            function drawConfetti() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                let activePieces = 0;
-                
-                confettiPieces.forEach(piece => {
-                    piece.y += piece.speed;
-                    piece.x += Math.sin(piece.angle * Math.PI / 180) * 1;
-                    piece.angle += 2;
-                    piece.rotation += piece.rotationSpeed;
-                    
-                    if (piece.y < canvas.height) {
-                        activePieces++;
-                        
-                        ctx.save();
-                        ctx.translate(piece.x, piece.y);
-                        ctx.rotate(piece.rotation * Math.PI / 180);
-                        ctx.fillStyle = piece.color;
-                        ctx.fillRect(-piece.size / 2, -piece.size / 2, piece.size, piece.size);
-                        ctx.restore();
-                    }
-                });
-                
-                if (activePieces > 0) {
-                    requestAnimationFrame(drawConfetti);
-                }
-            }
-            
-            drawConfetti();
-        }
-
-        // 📊 دالة لتسجيل النقرات على رابط جوجل
-        function trackGoogleReviewClick(phone) {
+        // 🔹 دالة لتسجيل النقرات
+        function trackButtonClick() {
             const clickData = {
-                phone: phone,
-                timestamp: new Date().toISOString(),
-                type: 'google_review_click',
+                phone: phone || 'غير معروف',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 userAgent: navigator.userAgent
             };
 
             // حفظ البيانات في Firebase
-            db.collection('google_review_clicks').add(clickData)
+            db.collection('buttonClicks').add(clickData)
                 .then(() => {
-                    console.log('✅ تم تسجيل النقرة على رابط جوجل');
+                    console.log("✅ تم تسجيل النقرة بنجاح");
+                    updateClickCount();
                 })
-                .catch((error) => {
-                    console.error('❌ خطأ في تسجيل النقرة:', error);
+                .catch(error => {
+                    console.error("❌ خطأ في تسجيل النقرة:", error);
+                });
+
+            // فتح الرابط في نافذة جديدة
+            window.open('https://maps.app.goo.gl/MNkEuaqDoSXXQ4rY8', '_blank');
+        }
+
+        // 🔹 دالة لتحديث عدد النقرات المعروض
+        function updateClickCount() {
+            db.collection('buttonClicks').get()
+                .then(snapshot => {
+                    totalClicks = snapshot.size;
+                    document.getElementById('clickCount').textContent = 
+                        `عدد الزيارات لموقعنا: ${totalClicks}`;
+                })
+                .catch(error => {
+                    console.error("❌ خطأ في جلب عدد النقرات:", error);
                 });
         }
 
-        // زر التقييم على جوجل
-        document.getElementById('googleReviewBtn').addEventListener('click', function() {
-            if (phone) {
-                // تسجيل النقرة قبل الانتقال
-                trackGoogleReviewClick(phone);
-            }
-            
-            // فتح رابط جوجل في نافذة جديدة
-            window.open('https://maps.app.goo.gl/MNkEuaqDoSXXQ4rY8', '_blank');
-            
-            // تحديث نص الزر
-            this.innerHTML = '<span>✅</span> شكرًا لك! تم فتح صفحة التقييم <span>✅</span>';
-            this.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
-            
-            // إظهار رسالة تأكيد
-            document.getElementById('statsInfo').innerHTML = '✅ تم تسجيل طلبك! ستحصل على نقاط إضافية عند الانتهاء من التقييم';
-            document.getElementById('statsInfo').style.background = '#d4edda';
-            document.getElementById('statsInfo').style.color = '#155724';
-            document.getElementById('statsInfo').style.borderColor = '#c3e6cb';
-        });
-
         if (phone) {
-            // عرض رقم الهاتف للمستخدم
-            document.getElementById('userPhone').textContent = phone;
-            
             const userRef = db.collection('feedback').doc(phone);
             userRef.get().then(doc => {
                 if (doc.exists) {
-                    const points = doc.data().points || 0;
-                    document.getElementById("points").textContent = points;
+                    userPoints = doc.data().points || 0;
+                    document.getElementById("points").textContent = userPoints;
 
-                    // 🎉 تشغيل تأثير الكونفيتي
+                    // 🎉 تشغيل تأثير الشرائط المتناثرة عند كل تحديث للنقاط
                     launchConfetti();
 
                     // ✅ إذا كان عدد النقاط 50 أو أكثر، عرض رسالة الاستبدال
-                    if (points >= 50) {
+                    if (userPoints >= 50) {
                         document.getElementById("rewardMessage").innerHTML = 
-                            `🎊 مبروك! يمكنك استبدال نقاطك بوجبة مجانية!<br>📞 رقمك: <strong class="phone-highlight">${phone}</strong>`;
+                            `🎊 مبروك! يمكنك الآن استبدال نقاطك بوجبة مجانية بقيمة 40 درهم!<br>📞 رقم هاتفك: <strong>${phone}</strong>`;
                         document.getElementById("rewardMessage").style.display = "block";
                     } else {
                         // ✅ حساب عدد النقاط المتبقية حتى 50 وإظهارها
-                        let remainingPoints = 50 - points;
+                        let remainingPoints = 50 - userPoints;
                         document.getElementById("remainingPointsMessage").innerHTML = 
-                            `⭐ لديك <strong>${points}</strong> نقطة، تبقى <strong>${remainingPoints}</strong> نقطة للوجبة المجانية!`;
+                            `⭐ لديك <strong>${userPoints}</strong> نقطة، وتبقى لك <strong>${remainingPoints}</strong> نقطة فقط للحصول على وجبة مجانية! `;
                         document.getElementById("remainingPointsMessage").style.display = "block";
                     }
 
                 } else {
                     document.getElementById("points").textContent = "0";
-                    launchConfetti();
                 }
             }).catch(error => {
                 console.error("❌ خطأ أثناء جلب النقاط:", error);
                 document.getElementById("points").textContent = "خطأ في جلب البيانات";
-                launchConfetti();
             });
+
+            // 🔹 تحميل عدد النقرات عند فتح الصفحة
+            updateClickCount();
+
         } else {
             document.getElementById("points").textContent = "لا يوجد رقم هاتف";
-            launchConfetti();
         }
 
-        // إعادة ضبط حجم الكانفاس عند تغيير حجم النافذة
-        window.addEventListener('resize', function() {
-            const canvas = document.getElementById('confetti-canvas');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
+        // 🔹 إضافة event listener للزر
+        document.getElementById('locationButton').addEventListener('click', trackButtonClick);
 
-        // منع التمرير على الهاتف
-        document.body.addEventListener('touchmove', function(e) {
-            if (window.innerHeight < 700) {
-                e.preventDefault();
-            }
-        }, { passive: false });
+        // 🎉 تأثير الشرائط المتناثرة
+        function launchConfetti() {
+            confetti({ particleCount: 100, spread: 70 });
+            setTimeout(() => confetti({ particleCount: 100, spread: 70 }), 1000);
+            setTimeout(() => confetti({ particleCount: 100, spread: 70 }), 2000);
+        }
     </script>
 
 </body>
