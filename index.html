@@ -282,92 +282,210 @@
       </form>
     </div>
 
-   <script>
-  // معالجة إرسال النموذج
-  async function handleFormSubmit(event) {
-    event.preventDefault();
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyB2kh06x0kA-SNA-dU2fu0-66xHsbATBRY",
+        authDomain: "feedback-445b9.firebaseapp.com",
+        projectId: "feedback-445b9",
+        storageBucket: "feedback-445b9.firebasestorage.app",
+        messagingSenderId: "771007711501",
+        appId: "1:771007711501:web:412efa0484ba4d3203c844",
+      };
 
-    const phone = document.getElementById("phone").value.trim();
-    const rating = document.querySelector(
-      'input[name="rating"]:checked'
-    )?.value;
-    const comments = document.getElementById("comments").value.trim();
+      // تهيئة Firebase
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
 
-    if (!validatePhoneNumber(phone)) {
-      alert("رقم الهاتف غير صحيح. يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.");
-      return;
-    }
+      // العناصر الأساسية
+      const feedbackForm = document.getElementById("feedbackForm");
+      const starValueElement = document.getElementById("starValue");
+      const loadingElement = document.getElementById("loading");
+      const submitButton = document.getElementById("submitButton");
 
-    if (!rating) {
-      alert("يرجى اختيار تقييم من خلال النجوم.");
-      return;
-    }
-
-    try {
-      // إظهار التحميل وتعطيل الزر
-      loadingElement.style.display = "block";
-      submitButton.disabled = true;
-      submitButton.textContent = "جاري الإرسال...";
-
-      const today = new Date().toISOString().split('T')[0];
-      
-      // التحقق من التقييم اليومي باستخدام معرف فريد
-      const todayDocId = phone + "_" + today;
-      const todayRef = db.collection("dailyChecks").doc(todayDocId);
-      const todayDoc = await todayRef.get();
-
-      if (todayDoc.exists) {
-        alert("لقد قمت بالتقييم اليوم بالفعل!");
-        loadingElement.style.display = "none";
-        submitButton.disabled = false;
-        submitButton.textContent = "إرسال التقييم";
-        return;
+      function validatePhoneNumber(phone) {
+        const phoneRegex = /^05[0-9]{8}$/;
+        return phoneRegex.test(phone);
       }
 
-      // حساب النقاط الإجمالية الحالية للرقم
-      const userReviewsRef = db.collection("feedback").where("phone", "==", phone);
-      const userReviewsSnapshot = await userReviewsRef.get();
-      
-      let totalUserPoints = 5; // يبدأ بـ 5 نقاط للتقييم الجديد
-      userReviewsSnapshot.forEach(doc => {
-        totalUserPoints += doc.data().points || 0;
+      function clearForm() {
+        document.getElementById("phone").value = "";
+        document.getElementById("comments").value = "";
+
+        // إعادة تعيين النجوم
+        document.querySelectorAll('input[name="rating"]').forEach((input) => {
+          input.checked = false;
+        });
+
+        // إعادة تعيين ألوان النجوم
+        document.querySelectorAll(".star-rating label").forEach((star) => {
+          star.style.color = "#ddd";
+        });
+
+        // تحديث العرض بعد تأخير بسيط
+        setTimeout(updateStarDisplay, 100);
+      }
+
+      // تحديث عرض النجوم والقيمة - مع التحقق من وجود العنصر
+      function updateStarDisplay() {
+        if (!starValueElement) return;
+
+        const checkedStar = document.querySelector(
+          'input[name="rating"]:checked'
+        );
+
+        if (checkedStar) {
+          const value = checkedStar.value;
+          const descriptions = {
+            1: "⭐ تقييم: 1/5 - ضعيف",
+            2: "⭐⭐ تقييم: 2/5 - مقبول",
+            3: "⭐⭐⭐ تقييم: 3/5 - جيد",
+            4: "⭐⭐⭐⭐ تقييم: 4/5 - جيد جداً",
+            5: "⭐⭐⭐⭐⭐ تقييم: 5/5 - ممتاز",
+          };
+          starValueElement.textContent =
+            descriptions[value] || "تقييم: " + value + "/5";
+          starValueElement.style.color = "#28a745";
+        } else {
+          starValueElement.textContent = "اختر تقييمك من 1 إلى 5 نجوم";
+          starValueElement.style.color = "#007bff";
+        }
+      }
+
+      // إضافة مستمعات الأحداث للنجوم
+      function initializeStarEvents() {
+        document.querySelectorAll(".star-rating input").forEach((star) => {
+          star.addEventListener("change", updateStarDisplay);
+
+          star.addEventListener("mouseover", function () {
+            const stars = document.querySelectorAll(".star-rating label");
+            const currentIndex = Array.from(stars).indexOf(
+              this.nextElementSibling
+            );
+
+            stars.forEach((star, index) => {
+              if (index >= currentIndex) {
+                star.style.color = "#ffcc00";
+              }
+            });
+          });
+
+          star.addEventListener("mouseout", function () {
+            const checkedStar = document.querySelector(
+              'input[name="rating"]:checked'
+            );
+            const stars = document.querySelectorAll(".star-rating label");
+
+            if (checkedStar) {
+              const checkedIndex = Array.from(stars).indexOf(
+                checkedStar.nextElementSibling
+              );
+              stars.forEach((star, index) => {
+                star.style.color = index >= checkedIndex ? "#ffcc00" : "#ddd";
+              });
+            } else {
+              stars.forEach((star) => (star.style.color = "#ddd"));
+            }
+          });
+        });
+      }
+
+      // معالجة إرسال النموذج
+      async function handleFormSubmit(event) {
+        event.preventDefault();
+
+        const phone = document.getElementById("phone").value.trim();
+        const rating = document.querySelector(
+          'input[name="rating"]:checked'
+        )?.value;
+        const comments = document.getElementById("comments").value.trim();
+
+        if (!validatePhoneNumber(phone)) {
+          alert("رقم الهاتف غير صحيح. يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.");
+          return;
+        }
+
+        if (!rating) {
+          alert("يرجى اختيار تقييم من خلال النجوم.");
+          return;
+        }
+
+        try {
+          // إظهار التحميل وتعطيل الزر
+          loadingElement.style.display = "block";
+          submitButton.disabled = true;
+          submitButton.textContent = "جاري الإرسال...";
+
+          const today = new Date().toISOString().split('T')[0];
+          
+          // التحقق من التقييم اليومي باستخدام معرف فريد
+          const todayDocId = phone + "_" + today;
+          const todayRef = db.collection("dailyChecks").doc(todayDocId);
+          const todayDoc = await todayRef.get();
+
+          if (todayDoc.exists) {
+            alert("لقد قمت بالتقييم اليوم بالفعل!");
+            loadingElement.style.display = "none";
+            submitButton.disabled = false;
+            submitButton.textContent = "إرسال التقييم";
+            return;
+          }
+
+          // حساب النقاط الإجمالية الحالية للرقم
+          const userReviewsRef = db.collection("feedback").where("phone", "==", phone);
+          const userReviewsSnapshot = await userReviewsRef.get();
+          
+          let totalUserPoints = 5; // يبدأ بـ 5 نقاط للتقييم الجديد
+          userReviewsSnapshot.forEach(doc => {
+            totalUserPoints += doc.data().points || 0;
+          });
+
+          // إنشاء معرف فريد لكل تقييم
+          const uniqueId = phone + "_" + new Date().getTime();
+          
+          // حفظ التقييم الجديد كوثيقة منفصلة
+          await db.collection("feedback").doc(uniqueId).set({
+            phone: phone,
+            rating: parseInt(rating),
+            comments: comments,
+            date: today,
+            points: 5, // نقاط هذا التقييم فقط
+            timestamp: new Date().getTime(), // لإضافة ترتيب زمني
+            docId: uniqueId // حفظ المعرف الفريد
+          });
+
+          // حفظ سجل التقييم اليومي
+          await todayRef.set({
+            phone: phone,
+            date: today,
+            rated: true,
+            timestamp: new Date().getTime()
+          });
+
+          clearForm();
+          window.location.href = `thankyou.html?phone=${phone}&points=${totalUserPoints}`;
+        } catch (error) {
+          console.error("خطأ أثناء الإرسال:", error);
+          alert("حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى لاحقًا.");
+
+          // إعادة تمكين الزر
+          loadingElement.style.display = "none";
+          submitButton.disabled = false;
+          submitButton.textContent = "إرسال التقييم";
+        }
+      }
+
+      // تهيئة الصفحة عند التحميل
+      document.addEventListener("DOMContentLoaded", function () {
+        // التحقق من وجود العناصر قبل استخدامها
+        if (feedbackForm && starValueElement) {
+          initializeStarEvents();
+          updateStarDisplay();
+
+          feedbackForm.addEventListener("submit", handleFormSubmit);
+        } else {
+          console.error("عناصر الصفحة غير موجودة");
+        }
       });
-
-      // إنشاء معرف فريد لكل تقييم
-      const uniqueId = phone + "_" + new Date().getTime();
-      
-      // حفظ التقييم الجديد كوثيقة منفصلة
-      await db.collection("feedback").doc(uniqueId).set({
-        phone: phone,
-        rating: parseInt(rating),
-        comments: comments,
-        date: today,
-        points: 5, // نقاط هذا التقييم فقط
-        timestamp: new Date().getTime(), // لإضافة ترتيب زمني
-        docId: uniqueId // حفظ المعرف الفريد
-      });
-
-      // حفظ سجل التقييم اليومي
-      await todayRef.set({
-        phone: phone,
-        date: today,
-        rated: true,
-        timestamp: new Date().getTime()
-      });
-
-      clearForm();
-      window.location.href = `thankyou.html?phone=${phone}&points=${totalUserPoints}`;
-    } catch (error) {
-      console.error("خطأ أثناء الإرسال:", error);
-      alert("حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى لاحقًا.");
-
-      // إعادة تمكين الزر
-      loadingElement.style.display = "none";
-      submitButton.disabled = false;
-      submitButton.textContent = "إرسال التقييم";
-    }
-  }
-</script>
+    </script>
   </body>
 </html>
-
