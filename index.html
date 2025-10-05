@@ -61,8 +61,13 @@
       }
 
       @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-8px) rotate(1deg); }
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-8px) rotate(1deg);
+        }
       }
 
       h2 {
@@ -185,24 +190,24 @@
         body {
           padding: 15px;
         }
-        
+
         .container {
           padding: 20px 15px;
         }
-        
+
         .logo {
           width: 90px;
           height: 90px;
         }
-        
+
         h2 {
           font-size: 1.2rem;
         }
-        
+
         .star-rating label {
           font-size: 28px;
         }
-        
+
         .submit-button {
           padding: 14px 18px;
         }
@@ -240,21 +245,23 @@
             <!-- النجوم من اليمين لليسار: 1 ← 2 ← 3 ← 4 ← 5 -->
             <input type="radio" id="star5" name="rating" value="5" />
             <label for="star5" title="ممتاز">★</label>
-            
+
             <input type="radio" id="star4" name="rating" value="4" />
             <label for="star4" title="جيد جداً">★</label>
-            
+
             <input type="radio" id="star3" name="rating" value="3" />
             <label for="star3" title="جيد">★</label>
-            
+
             <input type="radio" id="star2" name="rating" value="2" />
             <label for="star2" title="مقبول">★</label>
-            
+
             <input type="radio" id="star1" name="rating" value="1" />
             <label for="star1" title="ضعيف">★</label>
           </div>
           <div class="rating-description">
-            <span class="star-value" id="starValue">اختر تقييمك من 1 إلى 5 نجوم</span>
+            <span class="star-value" id="starValue"
+              >اختر تقييمك من 1 إلى 5 نجوم</span
+            >
           </div>
         </div>
 
@@ -269,7 +276,9 @@
 
         <div class="loading" id="loading">جاري الإرسال...</div>
 
-        <button type="submit" class="submit-button" id="submitButton">إرسال التقييم</button>
+        <button type="submit" class="submit-button" id="submitButton">
+          إرسال التقييم
+        </button>
       </form>
     </div>
 
@@ -301,17 +310,17 @@
       function clearForm() {
         document.getElementById("phone").value = "";
         document.getElementById("comments").value = "";
-        
+
         // إعادة تعيين النجوم
         document.querySelectorAll('input[name="rating"]').forEach((input) => {
           input.checked = false;
         });
-        
+
         // إعادة تعيين ألوان النجوم
         document.querySelectorAll(".star-rating label").forEach((star) => {
           star.style.color = "#ddd";
         });
-        
+
         // تحديث العرض بعد تأخير بسيط
         setTimeout(updateStarDisplay, 100);
       }
@@ -319,23 +328,26 @@
       // تحديث عرض النجوم والقيمة - مع التحقق من وجود العنصر
       function updateStarDisplay() {
         if (!starValueElement) return;
-        
-        const checkedStar = document.querySelector('input[name="rating"]:checked');
-        
+
+        const checkedStar = document.querySelector(
+          'input[name="rating"]:checked'
+        );
+
         if (checkedStar) {
           const value = checkedStar.value;
           const descriptions = {
-            '1': '⭐ تقييم: 1/5 - ضعيف',
-            '2': '⭐⭐ تقييم: 2/5 - مقبول', 
-            '3': '⭐⭐⭐ تقييم: 3/5 - جيد',
-            '4': '⭐⭐⭐⭐ تقييم: 4/5 - جيد جداً',
-            '5': '⭐⭐⭐⭐⭐ تقييم: 5/5 - ممتاز'
+            1: "⭐ تقييم: 1/5 - ضعيف",
+            2: "⭐⭐ تقييم: 2/5 - مقبول",
+            3: "⭐⭐⭐ تقييم: 3/5 - جيد",
+            4: "⭐⭐⭐⭐ تقييم: 4/5 - جيد جداً",
+            5: "⭐⭐⭐⭐⭐ تقييم: 5/5 - ممتاز",
           };
-          starValueElement.textContent = descriptions[value] || 'تقييم: ' + value + '/5';
-          starValueElement.style.color = '#28a745';
+          starValueElement.textContent =
+            descriptions[value] || "تقييم: " + value + "/5";
+          starValueElement.style.color = "#28a745";
         } else {
-          starValueElement.textContent = 'اختر تقييمك من 1 إلى 5 نجوم';
-          starValueElement.style.color = '#007bff';
+          starValueElement.textContent = "اختر تقييمك من 1 إلى 5 نجوم";
+          starValueElement.style.color = "#007bff";
         }
       }
 
@@ -343,29 +355,35 @@
       function initializeStarEvents() {
         document.querySelectorAll(".star-rating input").forEach((star) => {
           star.addEventListener("change", updateStarDisplay);
-          
-          star.addEventListener("mouseover", function() {
+
+          star.addEventListener("mouseover", function () {
             const stars = document.querySelectorAll(".star-rating label");
-            const currentIndex = Array.from(stars).indexOf(this.nextElementSibling);
-            
+            const currentIndex = Array.from(stars).indexOf(
+              this.nextElementSibling
+            );
+
             stars.forEach((star, index) => {
               if (index >= currentIndex) {
                 star.style.color = "#ffcc00";
               }
             });
           });
-          
-          star.addEventListener("mouseout", function() {
-            const checkedStar = document.querySelector('input[name="rating"]:checked');
+
+          star.addEventListener("mouseout", function () {
+            const checkedStar = document.querySelector(
+              'input[name="rating"]:checked'
+            );
             const stars = document.querySelectorAll(".star-rating label");
-            
+
             if (checkedStar) {
-              const checkedIndex = Array.from(stars).indexOf(checkedStar.nextElementSibling);
+              const checkedIndex = Array.from(stars).indexOf(
+                checkedStar.nextElementSibling
+              );
               stars.forEach((star, index) => {
                 star.style.color = index >= checkedIndex ? "#ffcc00" : "#ddd";
               });
             } else {
-              stars.forEach(star => star.style.color = "#ddd");
+              stars.forEach((star) => (star.style.color = "#ddd"));
             }
           });
         });
@@ -376,7 +394,9 @@
         event.preventDefault();
 
         const phone = document.getElementById("phone").value.trim();
-        const rating = document.querySelector('input[name="rating"]:checked')?.value;
+        const rating = document.querySelector(
+          'input[name="rating"]:checked'
+        )?.value;
         const comments = document.getElementById("comments").value.trim();
 
         if (!validatePhoneNumber(phone)) {
@@ -391,63 +411,81 @@
 
         try {
           // إظهار التحميل وتعطيل الزر
-          loadingElement.style.display = 'block';
+          loadingElement.style.display = "block";
           submitButton.disabled = true;
-          submitButton.textContent = 'جاري الإرسال...';
+          submitButton.textContent = "جاري الإرسال...";
 
-          const today = new Date().toISOString().split("T")[0];
-          const userRef = db.collection("feedback").doc(phone);
-          const doc = await userRef.get();
+          const today = new Date().toISOString().split('T')[0];
+          
+          // التحقق من التقييم اليومي باستخدام معرف فريد
+          const todayDocId = phone + "_" + today;
+          const todayRef = db.collection("dailyChecks").doc(todayDocId);
+          const todayDoc = await todayRef.get();
 
-          if (doc.exists && doc.data().date === today) {
+          if (todayDoc.exists) {
             alert("لقد قمت بالتقييم اليوم بالفعل!");
-            loadingElement.style.display = 'none';
+            loadingElement.style.display = "none";
             submitButton.disabled = false;
-            submitButton.textContent = 'إرسال التقييم';
+            submitButton.textContent = "إرسال التقييم";
             return;
           }
 
-          let totalPoints = doc.exists && doc.data().points ? doc.data().points + 5 : 5;
+          // إنشاء معرف فريد لكل تقييم
+          const uniqueId = phone + "_" + new Date().getTime();
+          
+          // حساب النقاط الإجمالية
+          const userRef = db.collection("feedback").where("phone", "==", phone);
+          const userDocs = await userRef.get();
+          let totalUserPoints = 5; // نقاط التقييم الحالي
+          
+          userDocs.forEach(doc => {
+            totalUserPoints += doc.data().points || 0;
+          });
 
-          await userRef.set(
-            {
-              phone: phone,
-              rating: parseInt(rating),
-              comments: comments,
-              date: today,
-              points: totalPoints,
-            },
-            { merge: true }
-          );
+          // حفظ التقييم الجديد كوثيقة منفصلة
+          await db.collection("feedback").doc(uniqueId).set({
+            phone: phone,
+            rating: parseInt(rating),
+            comments: comments,
+            date: today,
+            points: 5, // نقاط هذا التقييم فقط
+            timestamp: new Date().getTime(), // لإضافة ترتيب زمني
+            docId: uniqueId // حفظ المعرف الفريد
+          });
+
+          // حفظ سجل التقييم اليومي
+          await todayRef.set({
+            phone: phone,
+            date: today,
+            rated: true,
+            timestamp: new Date().getTime()
+          });
 
           clearForm();
           window.location.href = `thankyou.html?phone=${phone}`;
-
         } catch (error) {
           console.error("خطأ أثناء الإرسال:", error);
           alert("حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى لاحقًا.");
-          
+
           // إعادة تمكين الزر
-          loadingElement.style.display = 'none';
+          loadingElement.style.display = "none";
           submitButton.disabled = false;
-          submitButton.textContent = 'إرسال التقييم';
+          submitButton.textContent = "إرسال التقييم";
         }
       }
 
       // تهيئة الصفحة عند التحميل
-      document.addEventListener("DOMContentLoaded", function() {
+      document.addEventListener("DOMContentLoaded", function () {
         // التحقق من وجود العناصر قبل استخدامها
         if (feedbackForm && starValueElement) {
           initializeStarEvents();
           updateStarDisplay();
-          
+
           feedbackForm.addEventListener("submit", handleFormSubmit);
         } else {
           console.error("عناصر الصفحة غير موجودة");
         }
       });
-
     </script>
   </body>
 </html>
-
