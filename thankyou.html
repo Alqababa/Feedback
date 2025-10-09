@@ -11,173 +11,169 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet" />
 
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      body {
-        font-family: "Tajawal", sans-serif;
-        text-align: center;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .container {
-        background: white;
-        border-radius: 20px;
-        padding: 30px 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
-        width: 100%;
-        margin: 0 auto;
-      }
-
-      .logo-container {
-        position: relative;
-        margin-bottom: 20px;
-      }
-
-      .logo {
-        width: 120px;
-        height: 120px;
-        animation: float 3s ease-in-out infinite;
-        filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
-      }
-
-      @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-8px) rotate(1deg); }
-      }
-
-      h2 {
-        color: #28a745;
-        margin-bottom: 15px;
-        font-size: 1.4rem;
-      }
-
-      .points-container {
-        background: #f8f9fa;
-        border-radius: 15px;
-        padding: 20px;
-        margin: 15px 0;
-        border: 2px dashed #007bff;
-      }
-
-      #points {
-        font-size: 3rem;
-        font-weight: bold;
-        color: #007bff;
-        margin: 10px 0;
-      }
-
-      .reward-message,
-      .remaining-points-message {
-        background: #fff3cd;
-        color: #856404;
-        padding: 15px;
-        border-radius: 10px;
-        margin: 15px 0;
-        font-size: 0.9rem;
-        border-right: 4px solid #ffc107;
-        display: none;
-      }
-
-      .location-button {
-        background: linear-gradient(135deg, #ff6b00, #ff8c00);
-        color: white;
-        border: none;
-        padding: 18px 25px;
-        font-size: 1.1rem;
-        border-radius: 12px;
-        cursor: pointer;
-        margin: 20px 0 10px;
-        font-family: "Tajawal", sans-serif;
-        transition: all 0.3s;
-        font-weight: bold;
-        box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
-        width: 100%;
-      }
-
-      .location-button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
-      }
-
-      .button-description {
-        color: #666;
-        font-size: 0.8rem;
-        margin-top: 8px;
-        line-height: 1.4;
-      }
-
-      .click-info {
-        background: #e7f3ff;
-        padding: 10px;
-        border-radius: 8px;
-        margin-top: 10px;
-        font-size: 0.8rem;
-        color: #0066cc;
-        display: none;
-      }
-
-      @media (max-width: 480px) {
         body {
-          padding: 15px;
+            font-family: "Tajawal", sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-        
+
         .container {
-          padding: 25px 15px;
-          border-radius: 15px;
+            background: white;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
         }
-        
+
+        .logo-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
         .logo {
-          width: 100px;
-          height: 100px;
+            width: 120px;
+            height: 120px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
         }
-        
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
+        }
+
         h2 {
-          font-size: 1.2rem;
+            color: #28a745;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
         }
-        
+
+        .points-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 2px dashed #007bff;
+        }
+
         #points {
-          font-size: 2.5rem;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #007bff;
+            margin: 10px 0;
         }
-        
+
+        .reward-message,
+        .remaining-points-message {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            border-right: 4px solid #ffc107;
+            display: none;
+        }
+
+        .reward-message {
+            background: #d4edda;
+            color: #155724;
+            border-right: 4px solid #28a745;
+        }
+
         .location-button {
-          padding: 16px 20px;
-          font-size: 1rem;
+            background: linear-gradient(135deg, #ff6b00, #ff8c00);
+            color: white;
+            border: none;
+            padding: 18px 25px;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            margin: 20px 0 10px;
+            font-family: "Tajawal", sans-serif;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
+            width: 100%;
         }
-      }
+
+        .location-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
+        }
+
+        .button-description {
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        .click-info {
+            background: #e7f3ff;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #0066cc;
+            display: none;
+        }
+
+        .total-points-info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-right: 4px solid #007bff;
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 15px; }
+            .container { padding: 25px 15px; border-radius: 15px; }
+            .logo { width: 100px; height: 100px; }
+            h2 { font-size: 1.2rem; }
+            #points { font-size: 2.5rem; }
+            .location-button { padding: 16px 20px; font-size: 1rem; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="logo-container">
-            <img
-                src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png?raw=true"
-                alt="لوجو"
-                class="logo"
-            />
+            <img src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png?raw=true" alt="لوجو" class="logo" />
         </div>
 
         <h2>🎉 شكرًا لك على تقييمك! 🎉</h2>
         
+        <!-- معلومات إجمالي النقاط -->
+        <div class="total-points-info">
+            <p>إجمالي النقاط التي جمعتها:</p>
+            <p id="totalPoints">... جاري التحميل ...</p>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">
+                <span id="pointsProgress">0</span> نقطة من أصل 50 نقطة للوجبة المجانية
+            </p>
+        </div>
+
         <div class="points-container">
-            <p>عدد النقاط التي جمعتها:</p>
-            <p id="points">... جاري التحميل ...</p>
+            <p>النقاط المضافة في هذا التقييم:</p>
+            <p id="points">+5 نقاط</p>
         </div>
 
         <!-- رسالة تهنئة عند الوصول إلى 50 نقطة -->
@@ -218,26 +214,39 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 🟢 استخراج رقم الهاتف من الرابط
+        // 🔹 استخراج رقم الهاتف والنقاط من الرابط
         const urlParams = new URLSearchParams(window.location.search);
         const phone = urlParams.get("phone");
+        const newPoints = urlParams.get("points");
 
-        // 🔹 دالة لتسجيل النقرات (محسنة)
+        // 🔹 دالة لجلب إجمالي النقاط
+        async function getTotalPointsForPhone(phone) {
+            try {
+                const userReviewsRef = db.collection("feedback").where("phone", "==", phone);
+                const userReviewsSnapshot = await userReviewsRef.get();
+                
+                let totalPoints = 0;
+                userReviewsSnapshot.forEach(doc => {
+                    totalPoints += doc.data().points || 0;
+                });
+                
+                return totalPoints;
+            } catch (error) {
+                console.error("خطأ في جلب النقاط:", error);
+                return 0;
+            }
+        }
+
+        // 🔹 دالة لتسجيل النقرات
         async function trackButtonClick() {
-            // فتح النافذة أولاً
             const newWindow = window.open("https://maps.app.goo.gl/MNkEuaqDoSXXQ4rY8", "_blank");
-            
-            // ثم تسجيل البيانات في Firebase (بدون انتظار)
             recordClickInFirebase();
             
-            // التركيز على النافذة الجديدة
             if (newWindow) {
                 setTimeout(() => {
                     try {
                         newWindow.focus();
-                    } catch (e) {
-                        // تجاهل أي أخطاء في التركيز
-                    }
+                    } catch (e) {}
                 }, 100);
             }
         }
@@ -258,13 +267,12 @@
                 showClickInfo();
             } catch (error) {
                 console.error("❌ خطأ في تسجيل النقرة في Firebase:", error);
-                // حفظ محلي كبديل
                 saveClickLocally();
                 showClickInfo();
             }
         }
 
-        // 🔹 حفظ النقرات محلياً كبديل
+        // 🔹 حفظ النقرات محلياً
         function saveClickLocally() {
             try {
                 let clicks = JSON.parse(localStorage.getItem('reviewClicks') || '[]');
@@ -290,37 +298,36 @@
         }
 
         // 🔹 تحميل البيانات عند فتح الصفحة
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", async function () {
             if (phone) {
-                const userRef = db.collection("feedback").doc(phone);
-                userRef.get().then((doc) => {
-                    if (doc.exists) {
-                        const userPoints = doc.data().points || 0;
-                        document.getElementById("points").textContent = userPoints;
+                try {
+                    // حساب إجمالي النقاط الحقيقي من قاعدة البيانات
+                    const totalPoints = await getTotalPointsForPhone(phone);
+                    
+                    // عرض إجمالي النقاط
+                    document.getElementById("totalPoints").textContent = totalPoints + " نقطة";
+                    document.getElementById("pointsProgress").textContent = totalPoints;
+                    
+                    // 🎉 تشغيل تأثير الشرائط المتناثرة
+                    launchConfetti();
 
-                        // 🎉 تشغيل تأثير الشرائط المتناثرة
-                        launchConfetti();
-
-                        // ✅ عرض الرسائل المناسبة
-                        if (userPoints >= 50) {
-                            document.getElementById("rewardMessage").innerHTML = 
-                                `🎊 مبروك! يمكنك استبدال نقاطك بوجبة مجانية!<br>📞 رقمك: <strong>${phone}</strong>`;
-                            document.getElementById("rewardMessage").style.display = "block";
-                        } else {
-                            let remainingPoints = 50 - userPoints;
-                            document.getElementById("remainingPointsMessage").innerHTML = 
-                                `⭐ لديك <strong>${userPoints}</strong> نقطة، تبقى <strong>${remainingPoints}</strong> نقطة للوجبة المجانية!`;
-                            document.getElementById("remainingPointsMessage").style.display = "block";
-                        }
+                    // ✅ عرض الرسائل المناسبة
+                    if (totalPoints >= 50) {
+                        document.getElementById("rewardMessage").innerHTML = 
+                            `🎊 مبروك! يمكنك استبدال نقاطك بوجبة مجانية!<br>📞 رقمك: <strong>${phone}</strong>`;
+                        document.getElementById("rewardMessage").style.display = "block";
                     } else {
-                        document.getElementById("points").textContent = "0";
+                        let remainingPoints = 50 - totalPoints;
+                        document.getElementById("remainingPointsMessage").innerHTML = 
+                            `⭐ لديك <strong>${totalPoints}</strong> نقطة، تبقى <strong>${remainingPoints}</strong> نقطة للوجبة المجانية!`;
+                        document.getElementById("remainingPointsMessage").style.display = "block";
                     }
-                }).catch((error) => {
+                } catch (error) {
                     console.error("❌ خطأ أثناء جلب النقاط:", error);
-                    document.getElementById("points").textContent = "خطأ في جلب البيانات";
-                });
+                    document.getElementById("totalPoints").textContent = "خطأ في جلب البيانات";
+                }
             } else {
-                document.getElementById("points").textContent = "لا يوجد رقم هاتف";
+                document.getElementById("totalPoints").textContent = "لا يوجد رقم هاتف";
             }
 
             // 🔹 إضافة event listener للزر
