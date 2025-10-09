@@ -219,7 +219,7 @@
         const phone = urlParams.get("phone");
         const newPoints = urlParams.get("points");
 
-        // 🔹 دالة محسنة لجلب إجمالي النقاط
+        // 🔹 دالة لجلب إجمالي النقاط
         async function getTotalPointsForPhone(phone) {
             try {
                 const userReviewsRef = db.collection("feedback").where("phone", "==", phone);
@@ -227,11 +227,9 @@
                 
                 let totalPoints = 0;
                 userReviewsSnapshot.forEach(doc => {
-                    const data = doc.data();
-                    totalPoints += parseInt(data.points) || 0;
+                    totalPoints += doc.data().points || 0;
                 });
                 
-                console.log(`إجمالي النقاط الحقيقي للرقم ${phone}: ${totalPoints}`);
                 return totalPoints;
             } catch (error) {
                 console.error("خطأ في جلب النقاط:", error);
