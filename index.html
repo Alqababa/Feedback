@@ -88,6 +88,7 @@
             transition: all 0.3s;
             background: #f8f9fa;
             text-align: right;
+            direction: rtl; /* إضافة هذه الخاصية */
         }
 
         input:focus, textarea:focus {
@@ -95,6 +96,11 @@
             border-color: #007bff;
             background: white;
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        /* خاصية لجعل المؤشر يبدأ من اليمين */
+        textarea {
+            unicode-bidi: plaintext;
         }
 
         .star-rating {
@@ -425,24 +431,6 @@
                 submitButton.disabled = true;
                 submitButton.textContent = "جاري الإرسال...";
 
-                /**/
-                // تم تعطيل خاصية التحقق من التقييم اليومي مؤقتاً
-                /*
-                const today = new Date().toISOString().split('T')[0];
-                const todayDocId = phone + "_" + today;
-                const todayRef = db.collection("dailyChecks").doc(todayDocId);
-                const todayDoc = await todayRef.get();
-
-                if (todayDoc.exists) {
-                    alert("لقد قمت بالتقييم اليوم بالفعل!");
-                    loadingElement.style.display = "none";
-                    submitButton.disabled = false;
-                    submitButton.textContent = "إرسال التقييم (+5 نقاط)";
-                    return;
-                }
-                */
-                /**/
-
                 // حساب النقاط الإجمالية الحالية
                 const currentTotalPoints = await getTotalPointsForPhone(phone);
                 const newTotalPoints = currentTotalPoints + 5;
@@ -458,18 +446,6 @@
                     timestamp: new Date().getTime(),
                     docId: uniqueId
                 });
-
-                /**/
-                // تم تعطيل حفظ سجل التقييم اليومي
-                /*
-                await todayRef.set({
-                    phone: phone,
-                    date: today,
-                    rated: true,
-                    timestamp: new Date().getTime()
-                });
-                */
-                /**/
 
                 clearForm();
                 window.location.href = `thankyou.html?phone=${phone}&points=${newTotalPoints}`;
@@ -501,4 +477,3 @@
     </script>
 </body>
 </html>
-
