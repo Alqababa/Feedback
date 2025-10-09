@@ -151,6 +151,7 @@
             font-size: 0.8rem;
             color: #666;
             margin-top: 10px;
+            min-height: 20px;
         }
 
         @media (max-width: 480px) {
@@ -183,14 +184,12 @@
             <div class="progress-bar" id="progressBar" style="width: 0%"></div>
         </div>
 
-        <a href="#" class="google-button" id="googleButton" target="_blank">
+        <a href="https://www.google.com" class="google-button" id="googleButton" target="_blank">
             <span class="google-icon">🌐</span>
             تفضل بزيارة موقعنا على جوجل
         </a>
 
-        <div class="click-info" id="clickInfo">
-            سيتم تسجيل زيارتك لتتبع الإحصائيات
-        </div>
+        <div class="click-info" id="clickInfo"></div>
 
         <a href="index.html" class="back-button">العودة إلى التقييم</a>
     </div>
@@ -279,10 +278,8 @@
                     // تسجيل النقرة أولاً
                     trackGoogleClick();
                     
-                    // فتح الرابط بعد تسجيل النقرة
-                    setTimeout(() => {
-                        window.open('https://www.google.com', '_blank');
-                    }, 500);
+                    // السماح بالانتقال الطبيعي للرابط
+                    // لا حاجة لمنع السلوك الافتراضي لأن الرابط موجود في الـ href
                 });
             }
             
