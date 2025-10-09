@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="ar">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <title>Feedback</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>نظام التقييم - جمع النقاط</title>
 
     <!-- استيراد Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -14,478 +11,480 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet" />
 
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: "Tajawal", sans-serif;
-        text-align: center;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .container {
-        background: white;
-        border-radius: 20px;
-        padding: 25px 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
-        width: 100%;
-        margin: 0 auto;
-      }
-
-      .logo-container {
-        position: relative;
-        margin-bottom: 15px;
-      }
-
-      .logo {
-        width: 100px;
-        height: 100px;
-        animation: float 3s ease-in-out infinite;
-        filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
-      }
-
-      @keyframes float {
-        0%,
-        100% {
-          transform: translateY(0px) rotate(0deg);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        50% {
-          transform: translateY(-8px) rotate(1deg);
-        }
-      }
 
-      h2 {
-        color: #28a745;
-        margin-bottom: 15px;
-        font-size: 1.3rem;
-      }
-
-      .form-group {
-        margin-bottom: 15px;
-        text-align: right;
-      }
-
-      label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-        color: #333;
-        font-size: 0.95rem;
-      }
-
-      input,
-      textarea {
-        width: 100%;
-        padding: 12px 15px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        font-size: 16px;
-        font-family: "Tajawal", sans-serif;
-        transition: all 0.3s;
-        background: #f8f9fa;
-      }
-
-      input:focus,
-      textarea:focus {
-        outline: none;
-        border-color: #007bff;
-        background: white;
-        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-      }
-
-      /* النجوم من اليمين لليسار */
-      .star-rating {
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-        margin: 10px 0;
-        direction: ltr;
-      }
-
-      .star-rating input {
-        display: none;
-      }
-
-      .star-rating label {
-        font-size: 32px;
-        cursor: pointer;
-        transition: all 0.2s;
-        color: #ddd;
-        margin: 0;
-      }
-
-      /* النجوم المحددة والتحويم */
-      .star-rating input:checked ~ label,
-      .star-rating label:hover,
-      .star-rating label:hover ~ label {
-        color: #ffcc00;
-      }
-
-      .submit-button {
-        background: linear-gradient(135deg, #ff6b00, #ff8c00);
-        color: white;
-        border: none;
-        padding: 16px 20px;
-        font-size: 1rem;
-        border-radius: 12px;
-        cursor: pointer;
-        margin: 15px 0 5px;
-        font-family: "Tajawal", sans-serif;
-        transition: all 0.3s;
-        font-weight: bold;
-        box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
-        width: 100%;
-      }
-
-      .submit-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
-      }
-
-      .submit-button:disabled {
-        background: #cccccc;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-      }
-
-      .rating-description {
-        color: #666;
-        font-size: 0.85rem;
-        margin-top: 5px;
-        text-align: center;
-      }
-
-      .star-value {
-        color: #007bff;
-        font-weight: bold;
-        font-size: 0.8rem;
-        margin-top: 5px;
-      }
-
-      .loading {
-        display: none;
-        color: #007bff;
-        margin: 10px 0;
-      }
-
-      /* تحسينات للجوال */
-      @media (max-width: 480px) {
         body {
-          padding: 15px;
+            font-family: "Tajawal", sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .container {
-          padding: 20px 15px;
+            background: white;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .logo-container {
+            position: relative;
+            margin-bottom: 15px;
         }
 
         .logo {
-          width: 90px;
-          height: 90px;
+            width: 100px;
+            height: 100px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
         }
 
         h2 {
-          font-size: 1.2rem;
+            color: #28a745;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: "Tajawal", sans-serif;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .star-rating {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 10px 0;
+            direction: ltr;
+        }
+
+        .star-rating input {
+            display: none;
         }
 
         .star-rating label {
-          font-size: 28px;
+            font-size: 32px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #ddd;
+            margin: 0;
+        }
+
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #ffcc00;
         }
 
         .submit-button {
-          padding: 14px 18px;
+            background: linear-gradient(135deg, #ff6b00, #ff8c00);
+            color: white;
+            border: none;
+            padding: 16px 20px;
+            font-size: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            margin: 15px 0 5px;
+            font-family: "Tajawal", sans-serif;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
+            width: 100%;
         }
-      }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
+        }
+
+        .submit-button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .rating-description {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .star-value {
+            color: #007bff;
+            font-weight: bold;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        .loading {
+            display: none;
+            color: #007bff;
+            margin: 10px 0;
+        }
+
+        .points-info {
+            background: #e7f3ff;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+            color: #0066cc;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 15px; }
+            .container { padding: 20px 15px; }
+            .logo { width: 90px; height: 90px; }
+            h2 { font-size: 1.2rem; }
+            .star-rating label { font-size: 28px; }
+            .submit-button { padding: 14px 18px; }
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="container">
-      <div class="logo-container">
-        <img
-          src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png?raw=true"
-          alt="لوجو"
-          class="logo"
-        />
-      </div>
-
-      <h2>🎯 قيمنا واجمع النقاط</h2>
-
-      <form id="feedbackForm">
-        <div class="form-group">
-          <label for="phone">رقم الهاتف:</label>
-          <input
-            type="tel"
-            id="phone"
-            required
-            pattern="05[0-9]{8}"
-            title="يجب أن يبدأ الرقم بـ 05 ويتكون من 10 أرقام"
-            placeholder="أدخل رقم الهاتف (يبدأ بـ 05)"
-          />
+        <div class="logo-container">
+            <img src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png?raw=true" alt="لوجو" class="logo" />
         </div>
 
-        <div class="form-group">
-          <label>ما مدى سعادتك بطعامنا؟</label>
-          <div class="star-rating">
-            <!-- النجوم من اليمين لليسار: 1 ← 2 ← 3 ← 4 ← 5 -->
-            <input type="radio" id="star5" name="rating" value="5" />
-            <label for="star5" title="ممتاز">★</label>
+        <h2>🎯 قيمنا واجمع النقاط</h2>
 
-            <input type="radio" id="star4" name="rating" value="4" />
-            <label for="star4" title="جيد جداً">★</label>
-
-            <input type="radio" id="star3" name="rating" value="3" />
-            <label for="star3" title="جيد">★</label>
-
-            <input type="radio" id="star2" name="rating" value="2" />
-            <label for="star2" title="مقبول">★</label>
-
-            <input type="radio" id="star1" name="rating" value="1" />
-            <label for="star1" title="ضعيف">★</label>
-          </div>
-          <div class="rating-description">
-            <span class="star-value" id="starValue"
-              >اختر تقييمك من 1 إلى 5 نجوم</span
-            >
-          </div>
+        <!-- معلومات النقاط -->
+        <div id="pointsInfo" class="points-info">
+            <strong>نقاطك الحالية: <span id="currentPoints">0</span></strong>
+            <br>تبقى <span id="remainingPoints">50</span> نقطة للوجبة المجانية!
         </div>
 
-        <div class="form-group">
-          <label for="comments">ملاحظاتك أو اقتراحاتك:</label>
-          <textarea
-            id="comments"
-            rows="3"
-            placeholder="شاركنا رأيك لنساعدك بشكل أفضل..."
-          ></textarea>
-        </div>
+        <form id="feedbackForm">
+            <div class="form-group">
+                <label for="phone">رقم الهاتف:</label>
+                <input
+                    type="tel"
+                    id="phone"
+                    required
+                    pattern="05[0-9]{8}"
+                    title="يجب أن يبدأ الرقم بـ 05 ويتكون من 10 أرقام"
+                    placeholder="أدخل رقم الهاتف (يبدأ بـ 05)"
+                />
+            </div>
 
-        <div class="loading" id="loading">جاري الإرسال...</div>
+            <div class="form-group">
+                <label>ما مدى سعادتك بطعامنا؟</label>
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5" />
+                    <label for="star5" title="ممتاز">★</label>
+                    <input type="radio" id="star4" name="rating" value="4" />
+                    <label for="star4" title="جيد جداً">★</label>
+                    <input type="radio" id="star3" name="rating" value="3" />
+                    <label for="star3" title="جيد">★</label>
+                    <input type="radio" id="star2" name="rating" value="2" />
+                    <label for="star2" title="مقبول">★</label>
+                    <input type="radio" id="star1" name="rating" value="1" />
+                    <label for="star1" title="ضعيف">★</label>
+                </div>
+                <div class="rating-description">
+                    <span class="star-value" id="starValue">اختر تقييمك من 1 إلى 5 نجوم</span>
+                </div>
+            </div>
 
-        <button type="submit" class="submit-button" id="submitButton">
-          إرسال التقييم
-        </button>
-      </form>
+            <div class="form-group">
+                <label for="comments">ملاحظاتك أو اقتراحاتك:</label>
+                <textarea
+                    id="comments"
+                    rows="3"
+                    placeholder="شاركنا رأيك لنساعدك بشكل أفضل..."
+                ></textarea>
+            </div>
+
+            <div class="loading" id="loading">جاري الإرسال...</div>
+
+            <button type="submit" class="submit-button" id="submitButton">
+                إرسال التقييم (+5 نقاط)
+            </button>
+        </form>
     </div>
 
     <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyB2kh06x0kA-SNA-dU2fu0-66xHsbATBRY",
-        authDomain: "feedback-445b9.firebaseapp.com",
-        projectId: "feedback-445b9",
-        storageBucket: "feedback-445b9.firebasestorage.app",
-        messagingSenderId: "771007711501",
-        appId: "1:771007711501:web:412efa0484ba4d3203c844",
-      };
+        // 🔹 إعداد Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB2kh06x0kA-SNA-dU2fu0-66xHsbATBRY",
+            authDomain: "feedback-445b9.firebaseapp.com",
+            projectId: "feedback-445b9",
+            storageBucket: "feedback-445b9.firebasestorage.app",
+            messagingSenderId: "771007711501",
+            appId: "1:771007711501:web:412efa0484ba4d3203c844",
+        };
 
-      // تهيئة Firebase
-      firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore();
+        // 🔹 تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-      // العناصر الأساسية
-      const feedbackForm = document.getElementById("feedbackForm");
-      const starValueElement = document.getElementById("starValue");
-      const loadingElement = document.getElementById("loading");
-      const submitButton = document.getElementById("submitButton");
+        // 🔹 العناصر الأساسية
+        const feedbackForm = document.getElementById("feedbackForm");
+        const starValueElement = document.getElementById("starValue");
+        const loadingElement = document.getElementById("loading");
+        const submitButton = document.getElementById("submitButton");
+        const pointsInfo = document.getElementById("pointsInfo");
+        const currentPointsElement = document.getElementById("currentPoints");
+        const remainingPointsElement = document.getElementById("remainingPoints");
 
-      function validatePhoneNumber(phone) {
-        const phoneRegex = /^05[0-9]{8}$/;
-        return phoneRegex.test(phone);
-      }
-
-      function clearForm() {
-        document.getElementById("phone").value = "";
-        document.getElementById("comments").value = "";
-
-        // إعادة تعيين النجوم
-        document.querySelectorAll('input[name="rating"]').forEach((input) => {
-          input.checked = false;
-        });
-
-        // إعادة تعيين ألوان النجوم
-        document.querySelectorAll(".star-rating label").forEach((star) => {
-          star.style.color = "#ddd";
-        });
-
-        // تحديث العرض بعد تأخير بسيط
-        setTimeout(updateStarDisplay, 100);
-      }
-
-      // تحديث عرض النجوم والقيمة - مع التحقق من وجود العنصر
-      function updateStarDisplay() {
-        if (!starValueElement) return;
-
-        const checkedStar = document.querySelector(
-          'input[name="rating"]:checked'
-        );
-
-        if (checkedStar) {
-          const value = checkedStar.value;
-          const descriptions = {
-            1: "⭐ تقييم: 1/5 - ضعيف",
-            2: "⭐⭐ تقييم: 2/5 - مقبول",
-            3: "⭐⭐⭐ تقييم: 3/5 - جيد",
-            4: "⭐⭐⭐⭐ تقييم: 4/5 - جيد جداً",
-            5: "⭐⭐⭐⭐⭐ تقييم: 5/5 - ممتاز",
-          };
-          starValueElement.textContent =
-            descriptions[value] || "تقييم: " + value + "/5";
-          starValueElement.style.color = "#28a745";
-        } else {
-          starValueElement.textContent = "اختر تقييمك من 1 إلى 5 نجوم";
-          starValueElement.style.color = "#007bff";
+        // 🔹 التحقق من صحة رقم الهاتف
+        function validatePhoneNumber(phone) {
+            const phoneRegex = /^05[0-9]{8}$/;
+            return phoneRegex.test(phone);
         }
-      }
 
-      // إضافة مستمعات الأحداث للنجوم
-      function initializeStarEvents() {
-        document.querySelectorAll(".star-rating input").forEach((star) => {
-          star.addEventListener("change", updateStarDisplay);
-
-          star.addEventListener("mouseover", function () {
-            const stars = document.querySelectorAll(".star-rating label");
-            const currentIndex = Array.from(stars).indexOf(
-              this.nextElementSibling
-            );
-
-            stars.forEach((star, index) => {
-              if (index >= currentIndex) {
-                star.style.color = "#ffcc00";
-              }
-            });
-          });
-
-          star.addEventListener("mouseout", function () {
-            const checkedStar = document.querySelector(
-              'input[name="rating"]:checked'
-            );
-            const stars = document.querySelectorAll(".star-rating label");
-
-            if (checkedStar) {
-              const checkedIndex = Array.from(stars).indexOf(
-                checkedStar.nextElementSibling
-              );
-              stars.forEach((star, index) => {
-                star.style.color = index >= checkedIndex ? "#ffcc00" : "#ddd";
-              });
-            } else {
-              stars.forEach((star) => (star.style.color = "#ddd"));
+        // 🔹 جلب إجمالي النقاط للرقم
+        async function getTotalPointsForPhone(phone) {
+            try {
+                const userReviewsRef = db.collection("feedback").where("phone", "==", phone);
+                const userReviewsSnapshot = await userReviewsRef.get();
+                
+                let totalPoints = 0;
+                userReviewsSnapshot.forEach(doc => {
+                    totalPoints += doc.data().points || 0;
+                });
+                
+                return totalPoints;
+            } catch (error) {
+                console.error("خطأ في جلب النقاط:", error);
+                return 0;
             }
-          });
+        }
+
+        // 🔹 تحديث عرض معلومات النقاط
+        async function updatePointsInfo(phone) {
+            if (!phone || !validatePhoneNumber(phone)) {
+                pointsInfo.style.display = 'none';
+                return;
+            }
+
+            try {
+                const totalPoints = await getTotalPointsForPhone(phone);
+                currentPointsElement.textContent = totalPoints;
+                
+                const remainingPoints = Math.max(0, 50 - totalPoints);
+                remainingPointsElement.textContent = remainingPoints;
+                
+                pointsInfo.style.display = 'block';
+                
+                // تغيير اللون حسب عدد النقاط
+                if (totalPoints >= 50) {
+                    pointsInfo.style.background = '#d4edda';
+                    pointsInfo.style.color = '#155724';
+                } else if (totalPoints >= 25) {
+                    pointsInfo.style.background = '#fff3cd';
+                    pointsInfo.style.color = '#856404';
+                } else {
+                    pointsInfo.style.background = '#e7f3ff';
+                    pointsInfo.style.color = '#0066cc';
+                }
+            } catch (error) {
+                console.error("خطأ في تحديث معلومات النقاط:", error);
+            }
+        }
+
+        // 🔹 مسح النموذج
+        function clearForm() {
+            document.getElementById("phone").value = "";
+            document.getElementById("comments").value = "";
+            document.querySelectorAll('input[name="rating"]').forEach((input) => {
+                input.checked = false;
+            });
+            document.querySelectorAll(".star-rating label").forEach((star) => {
+                star.style.color = "#ddd";
+            });
+            pointsInfo.style.display = 'none';
+            setTimeout(updateStarDisplay, 100);
+        }
+
+        // 🔹 تحديث عرض النجوم
+        function updateStarDisplay() {
+            if (!starValueElement) return;
+
+            const checkedStar = document.querySelector('input[name="rating"]:checked');
+            if (checkedStar) {
+                const value = checkedStar.value;
+                const descriptions = {
+                    1: "⭐ تقييم: 1/5 - ضعيف",
+                    2: "⭐⭐ تقييم: 2/5 - مقبول",
+                    3: "⭐⭐⭐ تقييم: 3/5 - جيد",
+                    4: "⭐⭐⭐⭐ تقييم: 4/5 - جيد جداً",
+                    5: "⭐⭐⭐⭐⭐ تقييم: 5/5 - ممتاز",
+                };
+                starValueElement.textContent = descriptions[value] || "تقييم: " + value + "/5";
+                starValueElement.style.color = "#28a745";
+            } else {
+                starValueElement.textContent = "اختر تقييمك من 1 إلى 5 نجوم";
+                starValueElement.style.color = "#007bff";
+            }
+        }
+
+        // 🔹 تهيئة أحداث النجوم
+        function initializeStarEvents() {
+            document.querySelectorAll(".star-rating input").forEach((star) => {
+                star.addEventListener("change", updateStarDisplay);
+
+                star.addEventListener("mouseover", function () {
+                    const stars = document.querySelectorAll(".star-rating label");
+                    const currentIndex = Array.from(stars).indexOf(this.nextElementSibling);
+                    stars.forEach((star, index) => {
+                        if (index >= currentIndex) {
+                            star.style.color = "#ffcc00";
+                        }
+                    });
+                });
+
+                star.addEventListener("mouseout", function () {
+                    const checkedStar = document.querySelector('input[name="rating"]:checked');
+                    const stars = document.querySelectorAll(".star-rating label");
+                    if (checkedStar) {
+                        const checkedIndex = Array.from(stars).indexOf(checkedStar.nextElementSibling);
+                        stars.forEach((star, index) => {
+                            star.style.color = index >= checkedIndex ? "#ffcc00" : "#ddd";
+                        });
+                    } else {
+                        stars.forEach((star) => (star.style.color = "#ddd"));
+                    }
+                });
+            });
+        }
+
+        // 🔹 معالجة إرسال النموذج
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const phone = document.getElementById("phone").value.trim();
+            const rating = document.querySelector('input[name="rating"]:checked')?.value;
+            const comments = document.getElementById("comments").value.trim();
+
+            if (!validatePhoneNumber(phone)) {
+                alert("رقم الهاتف غير صحيح. يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.");
+                return;
+            }
+
+            if (!rating) {
+                alert("يرجى اختيار تقييم من خلال النجوم.");
+                return;
+            }
+
+            try {
+                loadingElement.style.display = "block";
+                submitButton.disabled = true;
+                submitButton.textContent = "جاري الإرسال...";
+
+                const today = new Date().toISOString().split('T')[0];
+                const todayDocId = phone + "_" + today;
+                const todayRef = db.collection("dailyChecks").doc(todayDocId);
+                const todayDoc = await todayRef.get();
+
+                if (todayDoc.exists) {
+                    alert("لقد قمت بالتقييم اليوم بالفعل!");
+                    loadingElement.style.display = "none";
+                    submitButton.disabled = false;
+                    submitButton.textContent = "إرسال التقييم (+5 نقاط)";
+                    return;
+                }
+
+                // حساب النقاط الإجمالية الحالية
+                const currentTotalPoints = await getTotalPointsForPhone(phone);
+                const newTotalPoints = currentTotalPoints + 5;
+
+                const uniqueId = phone + "_" + new Date().getTime();
+                
+                await db.collection("feedback").doc(uniqueId).set({
+                    phone: phone,
+                    rating: parseInt(rating),
+                    comments: comments,
+                    date: today,
+                    points: 5,
+                    timestamp: new Date().getTime(),
+                    docId: uniqueId
+                });
+
+                await todayRef.set({
+                    phone: phone,
+                    date: today,
+                    rated: true,
+                    timestamp: new Date().getTime()
+                });
+
+                clearForm();
+                window.location.href = `thankyou.html?phone=${phone}&points=${newTotalPoints}`;
+            } catch (error) {
+                console.error("خطأ أثناء الإرسال:", error);
+                alert("حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى لاحقًا.");
+                loadingElement.style.display = "none";
+                submitButton.disabled = false;
+                submitButton.textContent = "إرسال التقييم (+5 نقاط)";
+            }
+        }
+
+        // 🔹 تهيئة الصفحة
+        document.addEventListener("DOMContentLoaded", function () {
+            if (feedbackForm && starValueElement) {
+                initializeStarEvents();
+                updateStarDisplay();
+
+                // تحديث معلومات النقاط عند تغيير رقم الهاتف
+                document.getElementById("phone").addEventListener("input", function() {
+                    updatePointsInfo(this.value.trim());
+                });
+
+                feedbackForm.addEventListener("submit", handleFormSubmit);
+            } else {
+                console.error("عناصر الصفحة غير موجودة");
+            }
         });
-      }
-
-      // معالجة إرسال النموذج
-      async function handleFormSubmit(event) {
-        event.preventDefault();
-
-        const phone = document.getElementById("phone").value.trim();
-        const rating = document.querySelector(
-          'input[name="rating"]:checked'
-        )?.value;
-        const comments = document.getElementById("comments").value.trim();
-
-        if (!validatePhoneNumber(phone)) {
-          alert("رقم الهاتف غير صحيح. يجب أن يبدأ بـ 05 ويتكون من 10 أرقام.");
-          return;
-        }
-
-        if (!rating) {
-          alert("يرجى اختيار تقييم من خلال النجوم.");
-          return;
-        }
-
-        try {
-          // إظهار التحميل وتعطيل الزر
-          loadingElement.style.display = "block";
-          submitButton.disabled = true;
-          submitButton.textContent = "جاري الإرسال...";
-
-          const today = new Date().toISOString().split('T')[0];
-          
-          // التحقق من التقييم اليومي باستخدام معرف فريد
-          const todayDocId = phone + "_" + today;
-          const todayRef = db.collection("dailyChecks").doc(todayDocId);
-          const todayDoc = await todayRef.get();
-
-          if (todayDoc.exists) {
-            alert("لقد قمت بالتقييم اليوم بالفعل!");
-            loadingElement.style.display = "none";
-            submitButton.disabled = false;
-            submitButton.textContent = "إرسال التقييم";
-            return;
-          }
-
-          // حساب النقاط الإجمالية الحالية للرقم
-          const userReviewsRef = db.collection("feedback").where("phone", "==", phone);
-          const userReviewsSnapshot = await userReviewsRef.get();
-          
-          let totalUserPoints = 5; // يبدأ بـ 5 نقاط للتقييم الجديد
-          userReviewsSnapshot.forEach(doc => {
-            totalUserPoints += doc.data().points || 0;
-          });
-
-          // إنشاء معرف فريد لكل تقييم
-          const uniqueId = phone + "_" + new Date().getTime();
-          
-          // حفظ التقييم الجديد كوثيقة منفصلة
-          await db.collection("feedback").doc(uniqueId).set({
-            phone: phone,
-            rating: parseInt(rating),
-            comments: comments,
-            date: today,
-            points: 5, // نقاط هذا التقييم فقط
-            timestamp: new Date().getTime(), // لإضافة ترتيب زمني
-            docId: uniqueId // حفظ المعرف الفريد
-          });
-
-          // حفظ سجل التقييم اليومي
-          await todayRef.set({
-            phone: phone,
-            date: today,
-            rated: true,
-            timestamp: new Date().getTime()
-          });
-
-          clearForm();
-          window.location.href = `thankyou.html?phone=${phone}&points=${totalUserPoints}`;
-        } catch (error) {
-          console.error("خطأ أثناء الإرسال:", error);
-          alert("حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى لاحقًا.");
-
-          // إعادة تمكين الزر
-          loadingElement.style.display = "none";
-          submitButton.disabled = false;
-          submitButton.textContent = "إرسال التقييم";
-        }
-      }
-
-      // تهيئة الصفحة عند التحميل
-      document.addEventListener("DOMContentLoaded", function () {
-        // التحقق من وجود العناصر قبل استخدامها
-        if (feedbackForm && starValueElement) {
-          initializeStarEvents();
-          updateStarDisplay();
-
-          feedbackForm.addEventListener("submit", handleFormSubmit);
-        } else {
-          console.error("عناصر الصفحة غير موجودة");
-        }
-      });
     </script>
-  </body>
+</body>
 </html>
