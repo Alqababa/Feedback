@@ -283,7 +283,7 @@
             return phoneRegex.test(phone);
         }
 
-        // 🔹 جلب إجمالي النقاط للرقم
+        // 🔹 دالة محسنة لجلب إجمالي النقاط للرقم
         async function getTotalPointsForPhone(phone) {
             try {
                 const userReviewsRef = db.collection("feedback").where("phone", "==", phone);
@@ -291,9 +291,11 @@
                 
                 let totalPoints = 0;
                 userReviewsSnapshot.forEach(doc => {
-                    totalPoints += doc.data().points || 0;
+                    const data = doc.data();
+                    totalPoints += parseInt(data.points) || 0;
                 });
                 
+                console.log(`إجمالي النقاط للرقم ${phone}: ${totalPoints}`);
                 return totalPoints;
             } catch (error) {
                 console.error("خطأ في جلب النقاط:", error);
@@ -422,6 +424,9 @@
                 submitButton.disabled = true;
                 submitButton.textContent = "جاري الإرسال...";
 
+                /**/
+                // تم تعطيل خاصية التحقق من التقييم اليومي مؤقتاً
+                /*
                 const today = new Date().toISOString().split('T')[0];
                 const todayDocId = phone + "_" + today;
                 const todayRef = db.collection("dailyChecks").doc(todayDocId);
@@ -434,6 +439,8 @@
                     submitButton.textContent = "إرسال التقييم (+5 نقاط)";
                     return;
                 }
+                */
+                /**/
 
                 // حساب النقاط الإجمالية الحالية
                 const currentTotalPoints = await getTotalPointsForPhone(phone);
@@ -445,18 +452,23 @@
                     phone: phone,
                     rating: parseInt(rating),
                     comments: comments,
-                    date: today,
+                    date: new Date().toISOString().split('T')[0],
                     points: 5,
                     timestamp: new Date().getTime(),
                     docId: uniqueId
                 });
 
+                /**/
+                // تم تعطيل حفظ سجل التقييم اليومي
+                /*
                 await todayRef.set({
                     phone: phone,
                     date: today,
                     rated: true,
                     timestamp: new Date().getTime()
                 });
+                */
+                /**/
 
                 clearForm();
                 window.location.href = `thankyou.html?phone=${phone}&points=${newTotalPoints}`;
