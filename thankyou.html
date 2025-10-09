@@ -144,14 +144,6 @@
         display: none;
       }
 
-      .total-points-info {
-        background: #e7f3ff;
-        padding: 15px;
-        border-radius: 10px;
-        margin: 15px 0;
-        border-right: 4px solid #007bff;
-      }
-
       @media (max-width: 480px) {
         body {
           padding: 15px;
@@ -188,15 +180,6 @@
       </div>
 
       <h2>🎉 شكرًا لك على تقييمك! 🎉</h2>
-
-      <!-- معلومات إجمالي النقاط -->
-      <div class="total-points-info">
-        <p>إجمالي النقاط التي جمعتها:</p>
-        <p id="totalPoints">... جاري التحميل ...</p>
-        <p style="font-size: 0.9rem; color: #666; margin-top: 5px">
-          <span id="pointsProgress">0</span> نقطة من أصل 50 نقطة للوجبة المجانية
-        </p>
-      </div>
 
       <div class="points-container">
         <p>النقاط المضافة في هذا التقييم:</p>
@@ -336,11 +319,6 @@
             // حساب إجمالي النقاط الحقيقي من قاعدة البيانات
             const totalPoints = await getTotalPointsForPhone(phone);
 
-            // عرض إجمالي النقاط
-            document.getElementById("totalPoints").textContent =
-              totalPoints + " نقطة";
-            document.getElementById("pointsProgress").textContent = totalPoints;
-
             // 🎉 تشغيل تأثير الشرائط المتناثرة
             launchConfetti();
 
@@ -348,7 +326,7 @@
             if (totalPoints >= 50) {
               document.getElementById(
                 "rewardMessage"
-              ).innerHTML = `🎊 مبروك! يمكنك استبدال نقاطك بوجبة مجانية!<br>📞 رقمك: <strong>${phone}</strong>`;
+              ).innerHTML = `🎊 مبروك! يمكنك استبدال نقاطك بوجبة مجانية!<br>📞 رقمك: <strong>${phone}</strong><br>🏆 إجمالي نقاطك: <strong>${totalPoints}</strong> نقطة`;
               document.getElementById("rewardMessage").style.display = "block";
             } else {
               let remainingPoints = 50 - totalPoints;
@@ -360,12 +338,7 @@
             }
           } catch (error) {
             console.error("❌ خطأ أثناء جلب النقاط:", error);
-            document.getElementById("totalPoints").textContent =
-              "خطأ في جلب البيانات";
           }
-        } else {
-          document.getElementById("totalPoints").textContent =
-            "لا يوجد رقم هاتف";
         }
 
         // 🔹 إضافة event listener للزر
@@ -385,5 +358,3 @@
     </script>
   </body>
 </html>
-
-
