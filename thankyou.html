@@ -1,361 +1,303 @@
 <!DOCTYPE html>
 <html lang="ar">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>شكرًا لك!</title>
-
+    <title>شكراً لك - جمع النقاط</title>
+    
     <!-- استيراد Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap"
-      rel="stylesheet"
-    />
-
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet" />
+    
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: "Tajawal", sans-serif;
-        text-align: center;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .container {
-        background: white;
-        border-radius: 20px;
-        padding: 30px 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
-        width: 100%;
-        margin: 0 auto;
-      }
-
-      .logo-container {
-        position: relative;
-        margin-bottom: 20px;
-      }
-
-      .logo {
-        width: 120px;
-        height: 120px;
-        animation: float 3s ease-in-out infinite;
-        filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
-      }
-
-      @keyframes float {
-        0%,
-        100% {
-          transform: translateY(0px) rotate(0deg);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        50% {
-          transform: translateY(-8px) rotate(1deg);
-        }
-      }
 
-      h2 {
-        color: #28a745;
-        margin-bottom: 15px;
-        font-size: 1.4rem;
-      }
-
-      .points-container {
-        background: #f8f9fa;
-        border-radius: 15px;
-        padding: 20px;
-        margin: 15px 0;
-        border: 2px dashed #007bff;
-      }
-
-      #points {
-        font-size: 3rem;
-        font-weight: bold;
-        color: #007bff;
-        margin: 10px 0;
-      }
-
-      .reward-message,
-      .remaining-points-message {
-        background: #fff3cd;
-        color: #856404;
-        padding: 15px;
-        border-radius: 10px;
-        margin: 15px 0;
-        font-size: 0.9rem;
-        border-right: 4px solid #ffc107;
-        display: none;
-      }
-
-      .reward-message {
-        background: #d4edda;
-        color: #155724;
-        border-right: 4px solid #28a745;
-      }
-
-      .location-button {
-        background: linear-gradient(135deg, #ff6b00, #ff8c00);
-        color: white;
-        border: none;
-        padding: 18px 25px;
-        font-size: 1.1rem;
-        border-radius: 12px;
-        cursor: pointer;
-        margin: 20px 0 10px;
-        font-family: "Tajawal", sans-serif;
-        transition: all 0.3s;
-        font-weight: bold;
-        box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
-        width: 100%;
-      }
-
-      .location-button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
-      }
-
-      .button-description {
-        color: #666;
-        font-size: 0.8rem;
-        margin-top: 8px;
-        line-height: 1.4;
-      }
-
-      .click-info {
-        background: #e7f3ff;
-        padding: 10px;
-        border-radius: 8px;
-        margin-top: 10px;
-        font-size: 0.8rem;
-        color: #0066cc;
-        display: none;
-      }
-
-      @media (max-width: 480px) {
         body {
-          padding: 15px;
+            font-family: "Tajawal", sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
+
         .container {
-          padding: 25px 15px;
-          border-radius: 15px;
+            background: white;
+            border-radius: 20px;
+            padding: 30px 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
+            width: 100%;
+            margin: 0 auto;
         }
-        .logo {
-          width: 100px;
-          height: 100px;
+
+        .success-icon {
+            font-size: 80px;
+            color: #28a745;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out;
         }
-        h2 {
-          font-size: 1.2rem;
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
         }
-        #points {
-          font-size: 2.5rem;
+
+        h1 {
+            color: #28a745;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
         }
-        .location-button {
-          padding: 16px 20px;
-          font-size: 1rem;
+
+        .points-display {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px dashed #2196f3;
         }
-      }
+
+        .points-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1976d2;
+            margin: 10px 0;
+        }
+
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 12px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .google-button {
+            background: linear-gradient(135deg, #4285f4, #34a853);
+            color: white;
+            border: none;
+            padding: 16px 25px;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            margin: 20px 0 10px;
+            font-family: "Tajawal", sans-serif;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(66, 133, 244, 0.4);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .google-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(66, 133, 244, 0.6);
+        }
+
+        .google-icon {
+            font-size: 1.3rem;
+        }
+
+        .back-button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-family: "Tajawal", sans-serif;
+            transition: all 0.3s;
+            width: 100%;
+            text-decoration: none;
+            display: block;
+        }
+
+        .back-button:hover {
+            background: #5a6268;
+        }
+
+        .click-info {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 25px 20px; }
+            h1 { font-size: 1.5rem; }
+            .points-number { font-size: 2rem; }
+            .google-button { padding: 14px 20px; font-size: 1rem; }
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="container">
-      <div class="logo-container">
-        <img
-          src="https://github.com/Alqababa/Feedback/blob/main/LOGO.png?raw=true"
-          alt="لوجو"
-          class="logo"
-        />
-      </div>
+        <div class="success-icon">✅</div>
+        
+        <h1>شكراً لك على تقييمك!</h1>
+        
+        <p>لقد قمت بكسب <strong>5 نقاط</strong> جديدة لمساعدتنا في التحسين</p>
+        
+        <div class="points-display">
+            <div>إجمالي نقاطك الحالية</div>
+            <div class="points-number" id="totalPoints">0</div>
+            <div>نقطة</div>
+        </div>
 
-      <h2>🎉 شكرًا لك على تقييمك! 🎉</h2>
+        <div class="progress-text" id="progressText">
+            تبقى 50 نقطة للوصول إلى الوجبة المجانية
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+        </div>
 
-      <div class="points-container">
-        <p>النقاط المضافة في هذا التقييم:</p>
-        <p id="points">+5 نقاط</p>
-      </div>
+        <a href="#" class="google-button" id="googleButton" target="_blank">
+            <span class="google-icon">🌐</span>
+            تفضل بزيارة موقعنا على جوجل
+        </a>
 
-      <!-- رسالة تهنئة عند الوصول إلى 50 نقطة -->
-      <div id="rewardMessage" class="reward-message"></div>
+        <div class="click-info" id="clickInfo">
+            سيتم تسجيل زيارتك لتتبع الإحصائيات
+        </div>
 
-      <!-- رسالة توضح عدد النقاط المتبقية -->
-      <div id="remainingPointsMessage" class="remaining-points-message"></div>
-
-      <!-- زر التقييم على جوجل -->
-      <button id="locationButton" class="location-button">
-        📍 قيمنا على جوجل واربح نقاط إضافية
-      </button>
-      <div class="button-description">
-        اضغط للتقييم على جوجل والحصول على فرصة ربح نقاط إضافية
-      </div>
-
-      <!-- معلومات النقرات -->
-      <div id="clickInfo" class="click-info">تم تسجيل نقرة جديدة بنجاح!</div>
+        <a href="index.html" class="back-button">العودة إلى التقييم</a>
     </div>
 
-    <!-- مكتبة تأثير الشرائط المتناثرة -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.0.2"></script>
-
     <script>
-      // 🔹 إعداد Firebase
-      const firebaseConfig = {
-        apiKey: "AIzaSyBkh06x0kA-SNA-dU2fu0-66xHsbATBRY",
-        authDomain: "feedback-445b9.firebaseapp.com",
-        projectId: "feedback-445b9",
-        storageBucket: "feedback-445b9.firebasestorage.app",
-        messagingSenderId: "771007711501",
-        appId: "1:771007711501:web:412efa0484ba4d3203c844",
-      };
-
-      // 🔹 تهيئة Firebase
-      firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore();
-
-      // 🔹 استخراج رقم الهاتف والنقاط من الرابط
-      const urlParams = new URLSearchParams(window.location.search);
-      const phone = urlParams.get("phone");
-      const newPoints = urlParams.get("points");
-
-      // 🔹 دالة محسنة لجلب إجمالي النقاط
-      async function getTotalPointsForPhone(phone) {
-        try {
-          const userReviewsRef = db
-            .collection("feedback")
-            .where("phone", "==", phone);
-          const userReviewsSnapshot = await userReviewsRef.get();
-
-          let totalPoints = 0;
-          userReviewsSnapshot.forEach((doc) => {
-            const data = doc.data();
-            totalPoints += parseInt(data.points) || 0;
-          });
-
-          console.log(`إجمالي النقاط الحقيقي للرقم ${phone}: ${totalPoints}`);
-          return totalPoints;
-        } catch (error) {
-          console.error("خطأ في جلب النقاط:", error);
-          return 0;
-        }
-      }
-
-      // 🔹 دالة لتسجيل النقرات
-      async function trackButtonClick() {
-        const newWindow = window.open(
-          "https://maps.app.goo.gl/MNkEuaqDoSXXQ4rY8",
-          "_blank"
-        );
-        recordClickInFirebase();
-
-        if (newWindow) {
-          setTimeout(() => {
-            try {
-              newWindow.focus();
-            } catch (e) {}
-          }, 100);
-        }
-      }
-
-      // 🔹 تسجيل النقرة في Firebase
-      async function recordClickInFirebase() {
-        const clickData = {
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          userAgent: navigator.userAgent,
-          source: "thankyou_page",
-          phone: phone || "غير معروف",
-          action: "google_review_click",
+        // 🔹 إعداد Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB2kh06x0kA-SNA-dU2fu0-66xHsbATBRY",
+            authDomain: "feedback-445b9.firebaseapp.com",
+            projectId: "feedback-445b9",
+            storageBucket: "feedback-445b9.firebasestorage.app",
+            messagingSenderId: "771007711501",
+            appId: "1:771007711501:web:412efa0484ba4d3203c844",
         };
 
-        try {
-          await db.collection("reviewClicks").add(clickData);
-          console.log("✅ تم تسجيل النقرة بنجاح في Firebase");
-          showClickInfo();
-        } catch (error) {
-          console.error("❌ خطأ في تسجيل النقرة في Firebase:", error);
-          saveClickLocally();
-          showClickInfo();
-        }
-      }
+        // 🔹 تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-      // 🔹 حفظ النقرات محلياً
-      function saveClickLocally() {
-        try {
-          let clicks = JSON.parse(localStorage.getItem("reviewClicks") || "[]");
-          clicks.push({
-            timestamp: new Date().toISOString(),
-            phone: phone || "غير معروف",
-            action: "google_review_click",
-          });
-          localStorage.setItem("reviewClicks", JSON.stringify(clicks));
-          console.log("✅ تم حفظ النقرة محلياً");
-        } catch (e) {
-          console.log("✅ تم تنفيذ النقرة بنجاح");
-        }
-      }
+        // 🔹 الحصول على المعلمات من الرابط
+        const urlParams = new URLSearchParams(window.location.search);
+        const phone = urlParams.get('phone');
+        const points = parseInt(urlParams.get('points')) || 0;
 
-      // 🔹 عرض رسالة تأكيد النقرة
-      function showClickInfo() {
-        const clickInfo = document.getElementById("clickInfo");
-        clickInfo.style.display = "block";
-        setTimeout(() => {
-          clickInfo.style.display = "none";
-        }, 3000);
-      }
-
-      // 🔹 تحميل البيانات عند فتح الصفحة
-      document.addEventListener("DOMContentLoaded", async function () {
-        if (phone) {
-          try {
-            // حساب إجمالي النقاط الحقيقي من قاعدة البيانات
-            const totalPoints = await getTotalPointsForPhone(phone);
-
-            // 🎉 تشغيل تأثير الشرائط المتناثرة
-            launchConfetti();
-
-            // ✅ عرض الرسائل المناسبة
-            if (totalPoints >= 50) {
-              document.getElementById(
-                "rewardMessage"
-              ).innerHTML = `🎊 مبروك! يمكنك استبدال نقاطك بوجبة مجانية!<br>📞 رقمك: <strong>${phone}</strong><br>🏆 إجمالي نقاطك: <strong>${totalPoints}</strong> نقطة`;
-              document.getElementById("rewardMessage").style.display = "block";
-            } else {
-              let remainingPoints = 50 - totalPoints;
-              document.getElementById(
-                "remainingPointsMessage"
-              ).innerHTML = `⭐ لديك <strong>${totalPoints}</strong> نقطة، تبقى <strong>${remainingPoints}</strong> نقطة للوجبة المجانية`;
-              document.getElementById("remainingPointsMessage").style.display =
-                "block";
+        // 🔹 تحديث واجهة النقاط
+        function updatePointsDisplay() {
+            const totalPointsElement = document.getElementById('totalPoints');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            totalPointsElement.textContent = points;
+            
+            const progressPercentage = Math.min((points / 50) * 100, 100);
+            progressBar.style.width = progressPercentage + '%';
+            
+            const remainingPoints = Math.max(0, 50 - points);
+            progressText.textContent = `تبقى ${remainingPoints} نقطة للوصول إلى الوجبة المجانية`;
+            
+            // تغيير لون شريط التقدم حسب النقاط
+            if (points >= 50) {
+                progressBar.style.background = 'linear-gradient(90deg, #4caf50, #2e7d32)';
+                progressText.innerHTML = '🎉 <strong>مبروك! لقد وصلت إلى الوجبة المجانية!</strong>';
+            } else if (points >= 25) {
+                progressBar.style.background = 'linear-gradient(90deg, #ff9800, #f57c00)';
             }
-          } catch (error) {
-            console.error("❌ خطأ أثناء جلب النقاط:", error);
-          }
         }
 
-        // 🔹 إضافة event listener للزر
-        document
-          .getElementById("locationButton")
-          .addEventListener("click", trackButtonClick);
-      });
+        // 🔹 دالة لتسجيل النقرة على زر جوجل
+        async function trackGoogleClick() {
+            if (!phone) return;
 
-      // 🎉 تأثير الشرائط المتناثرة
-      function launchConfetti() {
-        confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
-        setTimeout(
-          () => confetti({ particleCount: 60, spread: 50, origin: { y: 0.6 } }),
-          300
-        );
-      }
+            try {
+                const clickId = phone + '_google_' + new Date().getTime();
+                
+                await db.collection('googleClicks').doc(clickId).set({
+                    phone: phone,
+                    timestamp: new Date().getTime(),
+                    date: new Date().toISOString().split('T')[0],
+                    time: new Date().toLocaleTimeString('ar-SA'),
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    clickId: clickId
+                });
+                
+                console.log('تم تسجيل النقرة بنجاح');
+                
+                // تحديث العداد على الصفحة
+                const clickInfo = document.getElementById('clickInfo');
+                clickInfo.textContent = '✓ تم تسجيل زيارتك بنجاح';
+                clickInfo.style.color = '#28a745';
+                
+            } catch (error) {
+                console.error('خطأ في تسجيل النقرة:', error);
+            }
+        }
+
+        // 🔹 تهيئة الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            // تحديث عرض النقاط
+            updatePointsDisplay();
+            
+            // إضافة حدث النقرة على زر جوجل
+            const googleButton = document.getElementById('googleButton');
+            if (googleButton) {
+                googleButton.addEventListener('click', function(e) {
+                    // تسجيل النقرة أولاً
+                    trackGoogleClick();
+                    
+                    // فتح الرابط بعد تسجيل النقرة
+                    setTimeout(() => {
+                        window.open('https://www.google.com', '_blank');
+                    }, 500);
+                });
+            }
+            
+            // تسجيل زيارة الصفحة
+            if (phone) {
+                const visitId = phone + '_thankyou_' + new Date().getTime();
+                db.collection('pageVisits').doc(visitId).set({
+                    phone: phone,
+                    page: 'thankyou',
+                    timestamp: new Date().getTime(),
+                    date: new Date().toISOString().split('T')[0],
+                    time: new Date().toLocaleTimeString('ar-SA')
+                });
+            }
+        });
     </script>
-  </body>
+</body>
 </html>
-
